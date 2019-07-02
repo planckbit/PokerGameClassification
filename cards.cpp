@@ -1,3 +1,6 @@
+// THIS CODE IS LICENSED UNDER THE MIT LICENSE. SEE THE LICENSE FILE IN IN THE PROJECT ROOT OR AT
+// https://github.com/planckbit/PokerGameClassification
+
 #include <iostream>
 #include <stdlib.h> 
 #include "cards.h"
