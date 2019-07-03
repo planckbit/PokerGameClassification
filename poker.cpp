@@ -1,4 +1,4 @@
-//Author   PlanckBit
+//Author: PlanckBit
 //MIT License
 //Copyright (c) 2019 PlanckBit
 
@@ -235,7 +235,6 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], int c
 	      } 
     } //End switch 
  } 
- 
  
 //this is my display function which will display my hand the first time
 //  it occurs
