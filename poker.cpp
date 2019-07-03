@@ -1,14 +1,12 @@
 //Author   PlanckBit
-
-// THIS CODE IS LICENSED UNDER THE MIT LICENSE. SEE THE LICENSE FILE IN IN THE PROJECT ROOT OR AT
-// https://github.com/planckbit/PokerGameClassification
+//MIT License
+//Copyright (c) 2019 PlanckBit
 
 //THE POKER GAME PROBLEM:
 //  THIS PROGRAM WILL CREATE A CLASS FOR CARDS AND A CLASS FOR CLASSIFICATION
 //  OF A POKER GAME.  THE PROGRAM WILL GENERATE 50000 POKER HANDS AND WILL
 //  CLASSIFY EACH HAND AND ONLY DISPLAY THE FIRST OCCURRANCE OF IT CLASSIFICATION
 //  IT WILL THEN DISPLAY HOW MANY TIMES EACH HAND CLASSIFICATION OCCURS.
-
 
 #include <iostream>
 #include <stdlib.h> 
@@ -24,10 +22,8 @@ void classify_hand(classify, int [], unsigned int [], int, unsigned int);
 void display(classify poker_hand, unsigned int);
 
 int main() {
-
      deckOfCards deck;              //create my object deck and invoke constructor
      classify poker_hand;          //object created for class classify
-
      deck.shuffle();               //call member function and shuffle cards
      srand((unsigned) time(NULL)); //this will produce a different sequence of 
                                    //  of random cards everytime the program 
@@ -50,58 +46,44 @@ int main() {
 	 std::cout << "            " << "TO BEGIN THE RANDOM POKER GAME GENERATOR HIT ANY KEY " << std::endl
 	           << "            " << "           AND THEN ENTER OR HIT CTRL Z: ";  
 	      
-	      
    while(std::cin >> enter) { 
-	 
-	 std::cout << std::endl << std::endl;
-	 
-	 const int number=9;              //use for the number of classifications 
-     unsigned int counter=0;          //use for finding out the first time a classification hand occurs
-     int found[number]={0};           //use to determine first time  a classification 
+       std::cout << std::endl << std::endl;
+       const int number=9;            //use for the number of classifications 
+       unsigned int counter=0;        //use for finding out the first time a classification hand occurs
+       int found[number]={0};         //use to determine first time  a classification 
                                       //  happens, and when it happens the element is set to
                                       //  1, which means it can not be printed out again. 
-     unsigned int occur[number]={0};  //this will be use to keep count of all the different 
-                                      //   types of classifications for each hand.
+      unsigned int occur[number]={0};  //this will be use to keep count of all the different 
+                                       //   types of classifications for each hand.
 	      
-     //for loop will generate the number of random hands
-     for(unsigned int d=0; d<50000; d++){
-
-          //for loop will generate one card at a time, for a total of 5 cards per hand
+      //Geenerate the number of random hands
+      for(unsigned int d=0; d<50000; d++){
+          //Will generate one card at a time, for a total of 5 cards per hand
 	      for(int i=0; i<5; i++) {
-
-	           test_deck = deck.deckEmpty(); //testing to make sure deck not empty 
-	            
-	           //if this is true then my deck is empty. so we replace all 52 cards 
-	           if(test_deck==1) {
-	           deck.shuffle();
-	           }   
-	           
-	           playingCard card=deck.deal(); //initialize constructor, by dealing a card 
-	           
-	           //add a card to the hand as it is dealt
-	           poker_hand.insert_card(card.theRank(), card.theSuit(), i);
+	          test_deck = deck.deckEmpty(); //testing to make sure deck not empty 
+	          //if this is true then my deck is empty. so we replace all 52 cards 
+	          if(test_deck==1) {
+	          deck.shuffle();
+	          }   
+	          playingCard card=deck.deal(); //initialize constructor, by dealing a card 
+	          //add a card to the hand as it is dealt
+	          poker_hand.insert_card(card.theRank(), card.theSuit(), i);
 	      } 
-   	      
-   	       poker_hand.sort_hand(); //sort my poker hand by calling memeber funtion
+   	      poker_hand.sort_hand(); //sort my poker hand by calling memeber funtion
 	      ++counter;              //increment my counter, to indicate first hand 
-	      
-	      //this function will classify each hand
+	      //Classify each hand
 	      classify_hand(poker_hand, found, occur, number, counter); 
-     } 
+      } 
      
      std::cout << std::endl << std::endl;
-     
-     //for loop to print out how many occurrance of classifications
+     //Print out how many occurrance of classifications
      //  occur for each hand
      for(int k=0; k<9; k++) {
-          
           std::cout << std::endl
                << "     ";
           std::cout << std::setw(5)
                << std::setiosflags(std::ios::right);
-                         
           switch(k) {
-          
           case 0:
                std::cout << occur[k] << "     " << "PLAIN"; break;
           case 1:
@@ -122,27 +104,20 @@ int main() {
                std::cout << occur[k] << "     " << "STRAIGHT_FLUSH"; break;                                    
     	 }
      }
-      
      std::cout << std::endl << std::endl << std::endl; 
      std::cout << "            " << "TO PLAY THE RANDOM POKER GAME GENERATOR AGAIN HIT ANY KEY " << std::endl
 	      << "            " << "           AND THEN ENTER OR HIT CTRL Z: ";
-      
    }
-
    return 0;  	 
 }
 
-
-//this function will use the inspectors in class classify and will
+//Will use the inspectors in class classify and will
 //  determine the classification of each hand.
 void classify_hand(classify poker_hand, int found[], unsigned int occur[], int call, unsigned int counter) {
-
      int i=0;
      i=call-1;
-
      switch(call) {
-
-     case 9:
+     	case 9:
 	      if(poker_hand.straight_flush()==1) {
 		       occur[i]++;
 		       if(found[i]==0) {
@@ -153,10 +128,9 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], int c
 	      }
 	      else {
 		       classify_hand(poker_hand, found, occur, --call, counter);
-		  }
-		  break;
-			  
-	 case 8:
+	      }
+              break;
+	case 8:
 	      if(poker_hand.four_kind()==1) {
 		       occur[i]++;
 		       if(found[i]==0) {
@@ -169,8 +143,7 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], int c
 		       classify_hand(poker_hand, found, occur, --call, counter);
 	      }
 	      break;
-	  		  
-	  case 7:
+	case 7:
 	      if(poker_hand.full_house()==1) {
 	           occur[i]++;
 		       if(found[i]==0) {
@@ -181,10 +154,9 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], int c
 	      }
 	      else {
 	           classify_hand(poker_hand, found, occur, --call, counter);
-		  }
-		  break;	  
-					  
-     case 6:
+	      }
+	      break;	  
+        case 6:
 	      if(poker_hand.flush()==1) {
 		       occur[i]++;
 		       if(found[i]==0) {
@@ -195,10 +167,9 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], int c
 	      }
 	      else {
 		       classify_hand(poker_hand, found, occur, --call, counter);
-		  }
-		  break;
-			          
-     case 5:
+	      }
+	      break;
+        case 5:
 	      if(poker_hand.straight()==1) {
 	           occur[i]++;
 	           if(found[i]==0) {
@@ -209,10 +180,9 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], int c
 	      }
 	      else {
 		       classify_hand(poker_hand, found, occur, --call, counter);
-		  }
-		  break;
-                
-     case 4:
+	      }
+	      break;
+        case 4:
 	      if(poker_hand.three_kind()==1) {
 		       occur[i]++;
 	           if(found[i]==0) {
@@ -224,23 +194,21 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], int c
 	      else {
 		       classify_hand(poker_hand, found, occur, --call, counter);
 	      }
-		  break;    
-	
-     case 3:
+              break;    
+         case 3:
 	      if(poker_hand.two_pair()==1) {
 		       occur[i]++;
 		       if(found[i]==0) {
 		            display(poker_hand, counter);
 		            std::cout << "     " << "TWO_PAIR"  << std::endl;
 		            found[i]=1;
-		       }
+	               }
 	      }
 	      else {
 		       classify_hand(poker_hand, found, occur, --call, counter);
-		  }
-		  break;
-                      
-     case 2:
+	      }
+	      break;
+         case 2:
 	      if(poker_hand.one_pair()==1) {
 		       occur[i]++;
 		       if(found[i]==0) {
@@ -251,10 +219,9 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], int c
 	      }
 	      else {
 		       classify_hand(poker_hand, found, occur, --call, counter);
-		  }
-		  break;   
-	
-     case 1:
+              }
+	      break;   
+         case 1:
 	      if(poker_hand.plain()==1) {
 		       occur[i]++;
 		       if(found[i]==0) {
@@ -264,10 +231,9 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], int c
 		       }
 	      }
 	      else {
-		       break;
-		  } 
-    }  
-
+	          break;
+	      } 
+    } //End switch 
  } 
  
  
