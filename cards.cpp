@@ -6,8 +6,7 @@
 #include <stdlib.h> 
 #include "cards.h"
 
-//this will invoke my constructor, to change my private members to the correct
-//  card suit and rank
+//Card suit and rank
 playingCard::playingCard(cardSuit s, cardRank r) {
      suit=s;
      rank=r;
@@ -21,7 +20,7 @@ cardSuit playingCard::theSuit() const {
      return suit;
 } 
 
-//will print out one card at a time    
+//Will print out one card at a time    
 void playingCard::print() const { 
      switch(rank) {
      case 0:

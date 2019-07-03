@@ -9,22 +9,22 @@
 #include "cards.h"
 #include "classify.h"
 
-//function will be use to classify my hand
+//Used for classify the hand
 void classify_hand(classify, int [], unsigned int [], int, unsigned int);
 
-//will display the classification of a hand when it first occurs
+//Displays the classification of a hand when it first occurs
 void display(classify poker_hand, unsigned int);
 
 int main() {
      deckOfCards deck;              //create my object deck and invoke constructor
-     classify poker_hand;          //object created for class classify
-     deck.shuffle();               //call member function and shuffle cards
-     srand((unsigned) time(NULL)); //this will produce a different sequence of 
-                                   //  of random cards everytime the program 
-                                   //  is executed
+     classify poker_hand;           //object created for class classify
+     deck.shuffle();                //call member function and shuffle cards
+     srand((unsigned) time(NULL));  //this will produce a different sequence of 
+                                    //  of random cards everytime the program 
+                                    //  is executed
      
      char enter;
-     int test_deck;                //this will store the return value of deck.deckEmpty()
+     int test_deck;                 //this will store the return value of deck.deckEmpty()
      
      std::cout << std::endl << std::endl << std::endl;
           
@@ -47,8 +47,8 @@ int main() {
        int found[number]={0};         //use to determine first time  a classification 
                                       //  happens, and when it happens the element is set to
                                       //  1, which means it can not be printed out again. 
-      unsigned int occur[number]={0};  //this will be use to keep count of all the different 
-                                       //   types of classifications for each hand.
+      unsigned int occur[number]={0}; //this will be use to keep count of all the different 
+                                      //   types of classifications for each hand.
 	      
       //Geenerate the number of random hands
       for(unsigned int d=0; d<50000; d++){
@@ -230,7 +230,7 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], int c
     } //End switch 
  } 
  
-//this is my display function which will display my hand the first time
+//Display function which will display the hand the first time
 //  it occurs
 void display(classify poker_hand, unsigned int counter) {
      std::cout << "     ";
