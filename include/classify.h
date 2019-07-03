@@ -1,5 +1,6 @@
-// THIS CODE IS LICENSED UNDER THE MIT LICENSE. SEE THE LICENSE FILE IN IN THE PROJECT ROOT OR AT
-// https://github.com/planckbit/PokerGameClassification
+//Author: PlanckBit
+//MIT License
+//Copyright (c) 2019 PlanckBit
 
 #ifndef CLASSIFY_H
 #define CLASSIFY_H
@@ -7,7 +8,6 @@
 const int hand=5;   //a five card hand is defined for a hand of poker
 
 class classify {
-
      private: 
      
      int store_rank[hand];
@@ -35,5 +35,4 @@ class classify {
      void insert_card(cardRank, cardSuit, int);
      void sort_hand();
 };
-
 #endif     

@@ -1,5 +1,6 @@
-// THIS CODE IS LICENSED UNDER THE MIT LICENSE. SEE THE LICENSE FILE IN IN THE PROJECT ROOT OR AT
-// https://github.com/planckbit/PokerGameClassification
+//Author: PlanckBit
+//MIT License
+//Copyright (c) 2019 PlanckBit
 
 #ifndef CARDS_H
 #define CARDS_H
@@ -10,7 +11,6 @@ typedef int cardRank; //2=deuce, 3=trey, 4=four,... 10=ten,
 		      //11=Jack, 12=Queen, 13=King, 14=Ace
 
 class playingCard {
-
     private:
 	cardSuit suit;
 	cardRank rank;
@@ -28,7 +28,6 @@ class playingCard {
 };
 
 class deckOfCards {
-
     private:
 	int deck[52];
 	int cardsInDeck;
@@ -45,5 +44,4 @@ class deckOfCards {
 	playingCard deal();//Return 1 card at random. The card
 			   //	is removed from the deck.
 };
-
 #endif
