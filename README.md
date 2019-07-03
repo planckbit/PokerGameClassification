@@ -21,7 +21,7 @@
   
 ## Usage:
    --Compile
-     g++ -o poker.bin -I/home/planckbit/Development/Poker/include poker.cpp cards.cpp classify.cpp
+     g++ -o poker.bin -I/home/planckbit/Development/Poker/include poker.cpp cards.cpp classify.cpp<br>
    --Execute: poker.bin
 
 ## Example Output
