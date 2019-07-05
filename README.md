@@ -20,9 +20,11 @@
      x86_64 x86_64 x86_64 GNU/Linux
   
 ## Usage:
-   --Compile
-     g++ -o poker.bin -I/home/planckbit/Development/Poker/include poker.cpp cards.cpp classify.cpp<br>
-   --Execute: poker.bin
+   * Compile:
+     ```
+     g++ -o poker.bin -I~/PokerGameClassification/include poker.cpp cards.cpp classify.cpp
+     ```
+   * Execute: poker.bin
 
 ## Example Output
 
