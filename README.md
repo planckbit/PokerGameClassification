@@ -1,7 +1,7 @@
 <b>MIT License</b><br>
 <b><i>Copyright (c) 2019 PlanckBit</b>
 
-# Poker Game Card Classification
+# Poker Game Hand Rank Card Classification
   
   This program will create a class for cards and a class for classification of a
   poker game. The program will generate 50000 poker hands and will classify each
