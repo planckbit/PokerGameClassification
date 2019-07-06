@@ -4,12 +4,12 @@
 # Poker Game Hand Rank Card Classification
   
   The program generates 50000 poker hands, classifies the
-  hand and only displays the first occurrance of its classification. It will then
-  display how many times each hand rank classification occurs.
+  hand according to rank and only displays the first occurrance of its classification. 
+  It will then display how many times each hand rank classification occurs.
   
 ## Features
-   * Generates random poker hands and classifies them.
-   * Displays the total occurances for each specific poker hand.
+   * Generates random poker hands and classifies them by rank.
+   * Displays the total occurances for each specific poker hand rank.
   
 ## Tested with
    * g++ (Ubuntu 7.4.0-1ubuntu1~18.04.1) 7.4.0
