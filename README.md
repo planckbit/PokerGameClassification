@@ -3,10 +3,9 @@
 
 # Poker Game Hand Rank Card Classification
   
-  This program will create a class for cards and a class for classification of a
-  poker game. The program will generate 50000 poker hands and will classify each
-  hand and only display the first occurrance of its classification. It will then
-  display how many times each hand classification occurs.
+  The program generates 50000 poker hands, classifies the
+  hand and only displays the first occurrance of its classification. It will then
+  display how many times each hand rank classification occurs.
   
 ## Features
    * Generates random poker hands and classifies them.
