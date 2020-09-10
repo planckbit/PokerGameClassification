@@ -17,7 +17,7 @@ int classify::straight_flush() const {
      int test=1; //test while loop condition
      int k=0;    //variable use for scanning elements of arrays
      while(test!=0) {
-	  if(store_rank[k]==((store_rank[k+1])-1) && k<hand-1) {
+	  if(k<hand-1 && store_rank[k]==((store_rank[k+1])-1)) {
                if(store_suit[k]==store_suit[k+1]) {
                     ++k;
                }
@@ -56,7 +56,7 @@ int classify::straight() const {
      int test=1;
      int k=0;
      while(test!=0) {
-         if(store_rank[k]==((store_rank[k+1])-1) && k < hand-1) {
+         if(k < hand-1 && store_rank[k]==((store_rank[k+1])-1)) {
              ++k;       //continue loop
          }
 	 else if(k==hand-1) {
@@ -130,7 +130,7 @@ int classify::one_pair() const {
 }
 
 int classify::plain() const {
-     for(int k=0; k<hand; k++) {
+     for(int k=0; k<hand-1; k++) {
 	     if(store_rank[k]==store_rank[k+1] || flush()==1) {
 	          return 0;  //no plain found
 	     }
