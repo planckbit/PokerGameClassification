@@ -58,3 +58,5 @@
         86     FULL_HOUSE
         12     FOUR_OF_A_KIND
          1     STRAIGHT_FLUSH
+
+  If this program is useful, please give it a star! Thank you!.
