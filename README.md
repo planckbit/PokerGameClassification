@@ -21,7 +21,7 @@
 ## Usage:
    * Compile:
      ```
-     g++ -o poker.bin -I~/PokerGameClassification/include poker.cpp cards.cpp classify.cpp
+     g++ -o poker.bin -I <your_directory>PokerGameClassification/include poker.cpp cards.cpp classify.cpp
      ```
    * Execute: poker.bin
 
