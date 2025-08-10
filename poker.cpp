@@ -10,7 +10,7 @@
 #include "classify.h"
 
 //Used for classify the hand
-void classify_hand(classify, int [], unsigned int [], int, unsigned int);
+void classify_hand(classify, int [], unsigned int [], unsigned int);
 
 //Displays the classification of a hand when it first occurs
 void display(classify poker_hand, unsigned int);
@@ -24,7 +24,7 @@ int main() {
                                     //  is executed
      
      char enter;
-     int test_deck;                 //this will store the return value of deck.deckEmpty()
+     bool test_deck;                 //this will store the return value of deck.deckEmpty()
      
      std::cout << std::endl << std::endl << std::endl;
           
@@ -56,7 +56,7 @@ int main() {
 	      for(int i=0; i<5; i++) {
 	          test_deck = deck.deckEmpty(); //testing to make sure deck not empty 
 	          //if this is true then my deck is empty. so we replace all 52 cards 
-	          if(test_deck==1) {
+	          if(test_deck) {
 	          deck.shuffle();
 	          }   
 	          playingCard card=deck.deal(); //initialize constructor, by dealing a card 
@@ -66,7 +66,7 @@ int main() {
    	      poker_hand.sort_hand(); //sort my poker hand by calling memeber funtion
 	      ++counter;              //increment my counter, to indicate first hand 
 	      //Classify each hand
-	      classify_hand(poker_hand, found, occur, number, counter); 
+	      classify_hand(poker_hand, found, occur, counter); 
       } 
      
      std::cout << std::endl << std::endl;
@@ -107,128 +107,72 @@ int main() {
 
 //Will use the inspectors in class classify and will
 //  determine the classification of each hand.
-void classify_hand(classify poker_hand, int found[], unsigned int occur[], int call, unsigned int counter) {
-     int i=0;
-     i=call-1;
-     switch(call) {
-     	case 9:
-	      if(poker_hand.straight_flush()==1) {
-		       occur[i]++;
-		       if(found[i]==0) {
-		            display(poker_hand, counter);
-		            std::cout << "     " << "STRAIGHT_FLUSH" << std::endl;
-		            found[i]=1;
-	           }
-	      }
-	      else {
-		       classify_hand(poker_hand, found, occur, --call, counter);
-	      }
-              break;
-	case 8:
-	      if(poker_hand.four_kind()==1) {
-		       occur[i]++;
-		       if(found[i]==0) {
-		            display(poker_hand, counter);
-		            std::cout << "     " << "FOUR_OF_A_KIND" << std::endl;
-		            found[i]=1;
-		       }
-	      }
-	      else {
-		       classify_hand(poker_hand, found, occur, --call, counter);
-	      }
-	      break;
-	case 7:
-	      if(poker_hand.full_house()==1) {
-	           occur[i]++;
-		       if(found[i]==0) {
-	                display(poker_hand, counter);
-		            std::cout << "     " << "FULL_HOUSE" << std::endl;
-	             	found[i]=1;
-	          }
-	      }
-	      else {
-	           classify_hand(poker_hand, found, occur, --call, counter);
-	      }
-	      break;	  
-        case 6:
-	      if(poker_hand.flush()==1) {
-		       occur[i]++;
-		       if(found[i]==0) {
-		            display(poker_hand, counter);
-	             	std::cout << "     " << "FLUSH" << std::endl;
-	             	found[i]=1;
-		       }
-	      }
-	      else {
-		       classify_hand(poker_hand, found, occur, --call, counter);
-	      }
-	      break;
-        case 5:
-	      if(poker_hand.straight()==1) {
-	           occur[i]++;
-	           if(found[i]==0) {
-	                display(poker_hand, counter);
-	            	std::cout << "     " << "STRAIGHT" << std::endl;
-		            found[i]=1;
-	           }
-	      }
-	      else {
-		       classify_hand(poker_hand, found, occur, --call, counter);
-	      }
-	      break;
-        case 4:
-	      if(poker_hand.three_kind()==1) {
-		       occur[i]++;
-	           if(found[i]==0) {
-		            display(poker_hand, counter);
-		            std::cout << "     " << "THREE_OF_A_KIND" << std::endl;
-		            found[i]=1;
-		       }
-	      }
-	      else {
-		       classify_hand(poker_hand, found, occur, --call, counter);
-	      }
-              break;    
-         case 3:
-	      if(poker_hand.two_pair()==1) {
-		       occur[i]++;
-		       if(found[i]==0) {
-		            display(poker_hand, counter);
-		            std::cout << "     " << "TWO_PAIR"  << std::endl;
-		            found[i]=1;
-	               }
-	      }
-	      else {
-		       classify_hand(poker_hand, found, occur, --call, counter);
-	      }
-	      break;
-         case 2:
-	      if(poker_hand.one_pair()==1) {
-		       occur[i]++;
-		       if(found[i]==0) {
-		            display(poker_hand, counter );
-		            std::cout << "     " << "ONE_PAIR" << std::endl;
-		            found[i]=1;
-		       }
-	      }
-	      else {
-		       classify_hand(poker_hand, found, occur, --call, counter);
-              }
-	      break;   
-         case 1:
-	      if(poker_hand.plain()==1) {
-		       occur[i]++;
-		       if(found[i]==0) {
-		            display(poker_hand, counter);
-		            std::cout << "     " << "PLAIN" << std::endl;
-		            found[i]=1;
-		       }
-	      }
-	      else {
-	          break;
-	      } 
-    } //End switch 
- } 
+void classify_hand(classify poker_hand, int found[], unsigned int occur[], unsigned int counter) {
+    if (poker_hand.straight_flush() == 1) {
+        occur[8]++;
+        if (found[8] == 0) {
+            display(poker_hand, counter);
+            std::cout << "     " << "STRAIGHT_FLUSH" << std::endl;
+            found[8] = 1;
+        }
+    } else if (poker_hand.four_kind() == 1) {
+        occur[7]++;
+        if (found[7] == 0) {
+            display(poker_hand, counter);
+            std::cout << "     " << "FOUR_OF_A_KIND" << std::endl;
+            found[7] = 1;
+        }
+    } else if (poker_hand.full_house() == 1) {
+        occur[6]++;
+        if (found[6] == 0) {
+            display(poker_hand, counter);
+            std::cout << "     " << "FULL_HOUSE" << std::endl;
+            found[6] = 1;
+        }
+    } else if (poker_hand.flush() == 1) {
+        occur[5]++;
+        if (found[5] == 0) {
+            display(poker_hand, counter);
+            std::cout << "     " << "FLUSH" << std::endl;
+            found[5] = 1;
+        }
+    } else if (poker_hand.straight() == 1) {
+        occur[4]++;
+        if (found[4] == 0) {
+            display(poker_hand, counter);
+            std::cout << "     " << "STRAIGHT" << std::endl;
+            found[4] = 1;
+        }
+    } else if (poker_hand.three_kind() == 1) {
+        occur[3]++;
+        if (found[3] == 0) {
+            display(poker_hand, counter);
+            std::cout << "     " << "THREE_OF_A_KIND" << std::endl;
+            found[3] = 1;
+        }
+    } else if (poker_hand.two_pair() == 1) {
+        occur[2]++;
+        if (found[2] == 0) {
+            display(poker_hand, counter);
+            std::cout << "     " << "TWO_PAIR" << std::endl;
+            found[2] = 1;
+        }
+    } else if (poker_hand.one_pair() == 1) {
+        occur[1]++;
+        if (found[1] == 0) {
+            display(poker_hand, counter);
+            std::cout << "     " << "ONE_PAIR" << std::endl;
+            found[1] = 1;
+        }
+    } else {
+        occur[0]++;
+        if (found[0] == 0) {
+            display(poker_hand, counter);
+            std::cout << "     " << "PLAIN" << std::endl;
+            found[0] = 1;
+        }
+    }
+} 
  
 //Display function which will display the hand the first time
 //  it occurs

@@ -37,7 +37,7 @@ class deckOfCards {
 	deckOfCards();
 
 	//inspector
-	int deckEmpty() const; //answer whether the deck is empty
+	bool deckEmpty() const; //answer whether the deck is empty
 
 	//modifiers
 	void shuffle();    //Replace all 52 cards into the deck

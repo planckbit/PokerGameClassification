@@ -7,7 +7,7 @@
 #include "classify.h"
 
 classify::classify(){
-     for(int i=hand; i<hand; i++) {
+     for(int i=0; i<hand; i++) {
        store_suit[i]=0;
        store_rank[i]=0;
      }
@@ -130,10 +130,15 @@ int classify::one_pair() const {
 }
 
 int classify::plain() const {
+     // Check for pairs, three of a kind, four of a kind, full house
      for(int k=0; k<hand-1; k++) {
-	     if(store_rank[k]==store_rank[k+1] || flush()==1) {
-	          return 0;  //no plain found
+	     if(store_rank[k]==store_rank[k+1]) {
+	          return 0;  // A pair was found, so it's not a plain hand
 	     }
+     }
+     // Check for flush and straight
+     if (flush() || straight()) {
+          return 0;
      }
      return 1; //a plain hand was found
 }

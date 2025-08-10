@@ -68,15 +68,41 @@ deckOfCards::deckOfCards() {
 }      
              
 //This will let the user inspect whether the deck is empty or not                     
-int deckOfCards::deckEmpty() const {
-     if (cardsInDeck <= 2)   
-         //the deck is empty, this tells the user by returning true
-         return 1;
-     else
-         //the deck is not empty, returns false
-         return 0;    
-}         
-                      
+bool deckOfCards::deckEmpty() const {
+     return cardsInDeck < 5;
+}
+
+//The user will call this function to get a card 
+playingCard deckOfCards::deal() { 
+    int c;   //used for switch statement
+    cardSuit s; //this is used to determine suit
+    cardRank r; //this is used to determine rank of that suit
+    const int divisor=13;
+    int card_dealt;
+
+    while (true) {
+        card_dealt = (rand() % (52));
+        if (deck[card_dealt] == 1) {
+            //card found, determine the suit and rank
+            c = (card_dealt / divisor);
+            r = (card_dealt % divisor);
+            //remove card from deck, by setting this element to zero
+            deck[card_dealt] = 0;
+            //decrement the number of cards in the deck
+            --cardsInDeck;
+            switch (c) {
+                case 0: s = CLUBS;    break;
+                case 1: s = DIAMONDS; break;
+                case 2: s = HEARTS;   break;
+                case 3: s = SPADES;   break;
+            }
+            playingCard cards(s, r);
+            return cards;
+        }
+    }
+}        
+
+
 //All elements are set to 1, meaning all cards in deck are now playable
 //  user will call this function when deckEmpty returns true;
 void deckOfCards::shuffle() {
@@ -84,39 +110,5 @@ void deckOfCards::shuffle() {
         deck[i]=1;
      }   
      cardsInDeck=52;
-}     
-
-//The user will call this function to get a card 
-playingCard deckOfCards::deal() { 
-     int c;   //used for switch statement     
-     cardSuit s; //this is used to determine suit
-     cardRank r; //this is used to determine rank of that suit
-     const int divisor=13; 
-     int card_dealt=(rand() % (52));
-     if (deck[card_dealt]==1) {
-        //card found, determine the suit and rank
-        c=(card_dealt/divisor);
-        r=(card_dealt%divisor); 
-        //remove card from deck, by setting this element to zero
-        deck[card_dealt]=0; 
-        //decrement the number of cards in the deck
-        --cardsInDeck;     
-        switch(c) {
-        case 0:
-             s=CLUBS;    break;
-        case 1:
-             s=DIAMONDS; break;
-        case 2:
-             s=HEARTS;   break;
-        case 3:
-             s=SPADES;   break; 
-        }                                      
-     }                              
-     else {   
-        //The card was not in the deck so get another card recurrsively
-        return deckOfCards::deal();
-     }
-     playingCard cards(s,r);
-     return cards;   
 }        
 
