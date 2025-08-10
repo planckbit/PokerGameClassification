@@ -41,8 +41,8 @@ void playingCard::print() const {
 
     switch(suit) {
         case 0: std::cout << "♣"; break;
-        case 1: std::cout << "♦"; break;
-        case 2: std::cout << "♥"; break;
+        case 1: std::cout << "\033[31m♦\033[0m"; break;
+        case 2: std::cout << "\033[31m♥\033[0m"; break;
         case 3: std::cout << "♠"; break;
     }
     std::cout << "] ";
