@@ -12,9 +12,6 @@
 //Used for classify the hand
 void classify_hand(classify, int [], unsigned int [], unsigned int);
 
-//Displays the classification of a hand when it first occurs
-void display(classify poker_hand, unsigned int);
-
 int main() {
      deckOfCards deck;              //create my object deck and invoke constructor
      classify poker_hand;           //object created for class classify
@@ -50,6 +47,9 @@ int main() {
       unsigned int occur[number]={0}; //this will be use to keep count of all the different 
                                       //   types of classifications for each hand.
 	      
+      std::cout << "Hand#     Classification       Poker Hand" << std::endl;
+      std::cout << "-----     --------------       -----------" << std::endl;
+
       //Geenerate the number of random hands
       for(unsigned int d=0; d<50000; d++){
           //Will generate one card at a time, for a total of 5 cards per hand
@@ -108,78 +108,66 @@ int main() {
 //Will use the inspectors in class classify and will
 //  determine the classification of each hand.
 void classify_hand(classify poker_hand, int found[], unsigned int occur[], unsigned int counter) {
+    auto print_hand = [&](const std::string& classification) {
+        std::cout << std::left << std::setw(10) << (std::to_string(counter) + ":")
+                  << std::left << std::setw(21) << classification;
+        poker_hand.print();
+        std::cout << std::endl;
+    };
+
     if (poker_hand.straight_flush() == 1) {
         occur[8]++;
         if (found[8] == 0) {
-            display(poker_hand, counter);
-            std::cout << "     " << "STRAIGHT_FLUSH" << std::endl;
+            print_hand("STRAIGHT_FLUSH");
             found[8] = 1;
         }
     } else if (poker_hand.four_kind() == 1) {
         occur[7]++;
         if (found[7] == 0) {
-            display(poker_hand, counter);
-            std::cout << "     " << "FOUR_OF_A_KIND" << std::endl;
+            print_hand("FOUR_OF_A_KIND");
             found[7] = 1;
         }
     } else if (poker_hand.full_house() == 1) {
         occur[6]++;
         if (found[6] == 0) {
-            display(poker_hand, counter);
-            std::cout << "     " << "FULL_HOUSE" << std::endl;
+            print_hand("FULL_HOUSE");
             found[6] = 1;
         }
     } else if (poker_hand.flush() == 1) {
         occur[5]++;
         if (found[5] == 0) {
-            display(poker_hand, counter);
-            std::cout << "     " << "FLUSH" << std::endl;
+            print_hand("FLUSH");
             found[5] = 1;
         }
     } else if (poker_hand.straight() == 1) {
         occur[4]++;
         if (found[4] == 0) {
-            display(poker_hand, counter);
-            std::cout << "     " << "STRAIGHT" << std::endl;
+            print_hand("STRAIGHT");
             found[4] = 1;
         }
     } else if (poker_hand.three_kind() == 1) {
         occur[3]++;
         if (found[3] == 0) {
-            display(poker_hand, counter);
-            std::cout << "     " << "THREE_OF_A_KIND" << std::endl;
+            print_hand("THREE_OF_A_KIND");
             found[3] = 1;
         }
     } else if (poker_hand.two_pair() == 1) {
         occur[2]++;
         if (found[2] == 0) {
-            display(poker_hand, counter);
-            std::cout << "     " << "TWO_PAIR" << std::endl;
+            print_hand("TWO_PAIR");
             found[2] = 1;
         }
     } else if (poker_hand.one_pair() == 1) {
         occur[1]++;
         if (found[1] == 0) {
-            display(poker_hand, counter);
-            std::cout << "     " << "ONE_PAIR" << std::endl;
+            print_hand("ONE_PAIR");
             found[1] = 1;
         }
     } else {
         occur[0]++;
         if (found[0] == 0) {
-            display(poker_hand, counter);
-            std::cout << "     " << "PLAIN" << std::endl;
+            print_hand("PLAIN");
             found[0] = 1;
         }
     }
-} 
- 
-//Display function which will display the hand the first time
-//  it occurs
-void display(classify poker_hand, unsigned int counter) {
-     std::cout << "     ";
-     std::cout << std::setw(5)  
-          << std::setiosflags(std::ios::right)
-          << counter <<":     ";
-     poker_hand.print(); //calls member function of class classify and prints the hand
 }

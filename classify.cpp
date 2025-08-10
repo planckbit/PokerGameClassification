@@ -150,6 +150,7 @@ void classify::print() const {
 	  int rank_card=store_rank[j];
 	  int suit_card=store_suit[j];
 
+      std::cout << "[";
 	  switch(rank_card) {
 	   case 0:
 	      std::cout << "2"; break;
@@ -168,7 +169,7 @@ void classify::print() const {
 	   case 7:
 	      std::cout << "9"; break;
 	   case 8:
-	      std::cout << "T"; break;
+	      std::cout << "10"; break;
 	   case 9:
 	      std::cout << "J"; break;
 	   case 10:
@@ -178,18 +179,19 @@ void classify::print() const {
 	   case 12:
 	      std::cout << "A"; break;
 	   }
-             
+
            switch(suit_card) {
             case 0:
-               std::cout << "C" <<"     "; break;
+               std::cout << "♣"; break;
             case 1:
-               std::cout << "D" <<"     "; break;
+               std::cout << "♦"; break;
             case 2:
-               std::cout << "H" <<"     "; break;
+               std::cout << "♥"; break;
             case 3:
-               std::cout << "S" <<"     "; break;   
+               std::cout << "♠"; break;
             }
-       }   
+        std::cout << "] ";
+       }
  }         
   
 //Will insert one card at a time, one for rank, one for suit
