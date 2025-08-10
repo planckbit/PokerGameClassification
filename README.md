@@ -26,7 +26,7 @@
    * Execute: poker.bin
 
 ## Example Output
-
+```
                   ****************************************
                   * THE POKER GAME RANDOM GENERATOR WILL *
                   * GENERATE 50000 POKER HANDS, AND ONLY *
@@ -59,5 +59,6 @@ Hand#     Classification       Poker Hand
         78     FULL_HOUSE
         21     FOUR_OF_A_KIND
          0     STRAIGHT_FLUSH
+```
 
   If this program is useful, please give it a star! Thank you!.
