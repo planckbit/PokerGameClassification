@@ -37,26 +37,27 @@
                   ****************************************
 
             TO BEGIN THE RANDOM POKER GAME GENERATOR HIT ANY KEY 
-                       AND THEN ENTER OR HIT CTRL Z: a
+                       AND THEN ENTER OR HIT CTRL Z: 
 
-         1:     4C     6S     7H     TH     JS          PLAIN
-         2:     2H     3D     7S     JC     JD          ONE_PAIR
-         3:     4H     5H     5D     5C     QC          THREE_OF_A_KIND
-        25:     5C     5H     7C     9S     9C          TWO_PAIR
-       138:     7S     7H     7D     QD     QH          FULL_HOUSE
-       519:     2H     3H     4H     8H     JH          FLUSH
-       560:     4D     5D     6D     7C     8S          STRAIGHT
-      1953:     2C     4H     4D     4S     4C          FOUR_OF_A_KIND
-     24714:     5C     6C     7C     8C     9C          STRAIGHT_FLUSH
+Hand#     Classification       Poker Hand
+-----     --------------       -----------
+1:        PLAIN                [4♥] [J♦] [Q♠] [K♥] [A♥] 
+2:        ONE_PAIR             [7♥] [7♠] [8♥] [Q♥] [A♦] 
+19:       TWO_PAIR             [2♠] [2♥] [3♥] [3♦] [9♣] 
+41:       THREE_OF_A_KIND      [8♦] [8♣] [8♠] [9♣] [A♥] 
+87:       FULL_HOUSE           [3♦] [3♠] [7♦] [7♥] [7♠] 
+346:      STRAIGHT             [7♣] [8♠] [9♣] [10♥] [J♣] 
+648:      FLUSH                [8♥] [9♥] [10♥] [J♥] [K♥] 
+9975:     FOUR_OF_A_KIND       [4♣] [J♦] [J♣] [J♦] [J♠] 
 
-     24921     PLAIN
-     22079     ONE_PAIR
-      1548     TWO_PAIR
-      1070     THREE_OF_A_KIND
-       184     STRAIGHT
+     25083     PLAIN
+     21887     ONE_PAIR
+      1546     TWO_PAIR
+      1111     THREE_OF_A_KIND
+       175     STRAIGHT
         99     FLUSH
-        86     FULL_HOUSE
-        12     FOUR_OF_A_KIND
-         1     STRAIGHT_FLUSH
+        78     FULL_HOUSE
+        21     FOUR_OF_A_KIND
+         0     STRAIGHT_FLUSH
 
   If this program is useful, please give it a star! Thank you!.
