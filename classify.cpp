@@ -2,7 +2,7 @@
 //MIT License
 //Copyright (c) 2019 PlanckBit
 
-#include <iostream>
+#include <cstdio> // For printf
 #include "cards.h"
 #include "classify.h"
 
@@ -11,6 +11,122 @@ classify::classify(){
        store_suit[i]=0;
        store_rank[i]=0;
      }
+}
+
+//Will insert one card at a time, one for rank, one for suit
+void classify::insert_card(cardRank r, cardSuit s, int i) {
+     //The card being stored must not exceed the hand which is 5 cards per hand
+     if (i<hand) {
+        store_rank[i]=r;
+        store_suit[i]=s;
+     }
+}
+
+//Will sort out the hand, by rank, the suit will also be sorted
+//  so that the elements correspond to each other.    
+void classify::sort_hand() {
+
+     //This will only sort a five card hand
+     for(int scan=1; scan<hand; scan++) {
+         for(int i=0; i< hand-scan; i++) {
+            if(store_rank[i] > store_rank[i+1]) {
+                 //sorting the rank
+                 int hold_rank=store_rank[i];
+                 store_rank[i]=store_rank[i+1];
+                 store_rank[i+1]=hold_rank;
+     
+                 //sorting the suit
+                 int hold_suit=store_suit[i];
+                 store_suit[i]=store_suit[i+1];
+                 store_suit[i+1]=hold_suit;
+             }   
+          }      
+     }
+}
+
+//Will print a hand in sorted order by rank
+// the hand will never exceed 5 cards
+void classify::print() const {
+     for(int j=0; j<hand; j++) {
+	  int rank_card=store_rank[j];
+	  int suit_card=store_suit[j];
+
+      printf("[");
+	  switch(rank_card) {
+	   case 0:
+	      printf("2"); break;
+	   case 1:
+	      printf("3"); break;
+	   case 2:
+	      printf("4"); break;
+	   case 3:
+	      printf("5"); break;
+	   case 4:
+	      printf("6"); break;
+	   case 5:
+	      printf("7"); break;
+	   case 6:
+	      printf("8"); break;
+	   case 7:
+	      printf("9"); break;
+	   case 8:
+	      printf("10"); break;
+	   case 9:
+	      printf("J"); break;
+	   case 10:
+	      printf("Q"); break;
+	   case 11:
+	      printf("K"); break;
+	   case 12:
+	      printf("A"); break;
+	   }
+
+           switch(suit_card) {
+            case 0:
+               printf("♣"); break;
+            case 1:
+               printf("\033[31m♦\033[0m"); break;
+            case 2:
+               printf("\033[31m♥\033[0m"); break;
+            case 3:
+               printf("♠"); break;
+            }
+        printf("] ");
+       }
+ }
+
+void classify::print_hidden() const {
+    // Print the first card
+    int rank_card = store_rank[0];
+    int suit_card = store_suit[0];
+
+    printf("[");
+    switch(rank_card) {
+        case 0: printf("2"); break;
+        case 1: printf("3"); break;
+        case 2: printf("4"); break;
+        case 3: printf("5"); break;
+        case 4: printf("6"); break;
+        case 5: printf("7"); break;
+        case 6: printf("8"); break;
+        case 7: printf("9"); break;
+        case 8: printf("10"); break;
+        case 9: printf("J"); break;
+        case 10: printf("Q"); break;
+        case 11: printf("K"); break;
+        case 12: printf("A"); break;
+    }
+
+    switch(suit_card) {
+        case 0: printf("♣"); break;
+        case 1: printf("\033[31m♦\033[0m"); break;
+        case 2: printf("\033[31m♥\033[0m"); break;
+        case 3: printf("♠"); break;
+    }
+    printf("] ");
+
+    // Print the second card as hidden
+    printf("[??]");
 }
 
 int classify::straight_flush() const {
@@ -34,7 +150,7 @@ int classify::straight_flush() const {
      }     
      return 0;               //no straight flush found by termination of loop
 }
-                         
+
 int classify::flush() const {
      int test=1;
      int k=0;
@@ -67,7 +183,7 @@ int classify::straight() const {
          }
      }
      return 0;           //no straight hand found on termination of loop                            
-}                 
+}
 
 int classify::four_kind() const {
      int k=0;
@@ -142,85 +258,3 @@ int classify::plain() const {
      }
      return 1; //a plain hand was found
 }
-
-//Will print a hand in sorted order by rank
-// the hand will never exceed 5 cards
-void classify::print() const {
-     for(int j=0; j<hand; j++) {
-	  int rank_card=store_rank[j];
-	  int suit_card=store_suit[j];
-
-      std::cout << "[";
-	  switch(rank_card) {
-	   case 0:
-	      std::cout << "2"; break;
-	   case 1:
-	      std::cout << "3"; break;
-	   case 2:
-	      std::cout << "4"; break;
-	   case 3:
-	      std::cout << "5"; break;
-	   case 4:
-	      std::cout << "6"; break;
-	   case 5:
-	      std::cout << "7"; break;
-	   case 6:
-	      std::cout << "8"; break;
-	   case 7:
-	      std::cout << "9"; break;
-	   case 8:
-	      std::cout << "10"; break;
-	   case 9:
-	      std::cout << "J"; break;
-	   case 10:
-	      std::cout << "Q"; break;
-	   case 11:
-	      std::cout << "K"; break;
-	   case 12:
-	      std::cout << "A"; break;
-	   }
-
-           switch(suit_card) {
-            case 0:
-               std::cout << "♣"; break;
-            case 1:
-               std::cout << "\033[31m♦\033[0m"; break;
-            case 2:
-               std::cout << "\033[31m♥\033[0m"; break;
-            case 3:
-               std::cout << "♠"; break;
-            }
-        std::cout << "] ";
-       }
- }         
-  
-//Will insert one card at a time, one for rank, one for suit
-void classify::insert_card(cardRank r, cardSuit s, int i) {
-     //The card being stored must not exceed the hand which is 5 cards per hand
-     if (i<hand) {
-        store_rank[i]=r;
-        store_suit[i]=s;
-     }
-}     
-      
-//Will sort out the hand, by rank, the suit will also be sorted
-//  so that the elements correspond to each other.    
-void classify::sort_hand() {
-
-     //This will only sort a five card hand
-     for(int scan=1; scan<hand; scan++) {
-         for(int i=0; i< hand-scan; i++) {
-            if(store_rank[i] > store_rank[i+1]) {
-                 //sorting the rank
-                 int hold_rank=store_rank[i];
-                 store_rank[i]=store_rank[i+1];
-                 store_rank[i+1]=hold_rank;
-     
-                 //sorting the suit
-                 int hold_suit=store_suit[i];
-                 store_suit[i]=store_suit[i+1];
-                 store_suit[i+1]=hold_suit;
-             }   
-          }      
-     }
-}     

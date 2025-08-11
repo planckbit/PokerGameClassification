@@ -5,6 +5,8 @@
 #ifndef CLASSIFY_H
 #define CLASSIFY_H
 
+#include "cards.h" // Add this line
+
 const int hand=5;   //a five card hand is defined for a hand of poker
 
 class classify {
@@ -30,6 +32,7 @@ class classify {
      
      //print a hand
      void print() const;
+     void print_hidden() const;
      
      //modifiers
      void insert_card(cardRank, cardSuit, int);

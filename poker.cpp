@@ -2,10 +2,10 @@
 //MIT License
 //Copyright (c) 2019 PlanckBit
 
-#include <iostream>
+#include <cstdio> // For printf
 #include <stdlib.h>
-#include <iomanip>
 #include <time.h>
+#include <string> // For std::string
 #include "cards.h"
 #include "classify.h"
 
@@ -16,12 +16,13 @@ void playTexasHoldem();
 void printTable();
 
 void classify_hand(classify poker_hand, int found[], unsigned int occur[], unsigned int counter) {
-    auto print_hand = [&](const std::string& classification) {
-        std::cout << std::left << std::setw(10) << (std::to_string(counter) + ":")
-                  << std::left << std::setw(21) << classification;
-        poker_hand.print();
-        std::cout << std::endl;
+    auto print_hand = [&](const char* classification) {
+        printf("%-10s%-21s", (std::to_string(counter) + ":").c_str(), classification);
+        poker_hand.print(); // This will need to be updated later
+        printf("\n");
     };
+
+
 
     if (poker_hand.straight_flush() == 1) {
         occur[8]++;
@@ -83,119 +84,149 @@ void classify_hand(classify poker_hand, int found[], unsigned int occur[], unsig
 void playPokerClassification() {
     deckOfCards deck;
     classify poker_hand;
-    deck.shuffle();
-    srand((unsigned) time(NULL));
+    srand((unsigned) time(NULL)); // Seed random number generator once
 
-    std::cout << std::endl << std::endl << std::endl;
-    std::cout << "                  " << "****************************************" << std::endl
-              << "                  " << "* THE POKER GAME RANDOM GENERATOR WILL *" << std::endl
-              << "                  " << "* GENERATE 50000 POKER HANDS, AND ONLY *" << std::endl
-              << "                  " << "* DISPLAY THE FIRST CLASSIFICATION OF  *" << std::endl
-              << "                  " << "* OF EACH HAND AT THE TIME IT OCCURS.  *" << std::endl
-              << "                  " << "* IT WILL THEN DISPLAY HOW MANY TIMES  *" << std::endl
-              << "                  " << "*      EACH CLASSIFICATION OCCUR.      *" << std::endl
-              << "                  " << "****************************************" << std::endl << std::endl << std::endl;
+    char choice;
+    do {
+        deck.shuffle(); // Shuffle for each new hand
+        printf("\n\n\n");
+        printf("                  ****************************************\n");
+        printf("                  * THE POKER GAME RANDOM GENERATOR WILL *\n");
+        printf("                  * GENERATE 50000 POKER HANDS, AND ONLY *\n");
+        printf("                  * DISPLAY THE FIRST CLASSIFICATION OF  *\n");
+        printf("                  * * OF EACH HAND AT THE TIME IT OCCURS.  *\n");
+        printf("                  * IT WILL THEN DISPLAY HOW MANY TIMES  *\n");
+        printf("                  *      EACH CLASSIFICATION OCCUR.      *\n");
+        printf("                  ****************************************\n\n\n");
 
-    std::cout << "            " << "TO BEGIN THE RANDOM POKER GAME GENERATOR HIT ANY KEY " << std::endl
-              << "            " << "           AND THEN ENTER OR HIT CTRL Z: ";
+        // Removed the prompt to begin the game.
 
-    char enter;
-    std::cin >> enter;
+        printf("\n\n");
+        const int number = 9;
+        unsigned int counter = 0;
+        int found[number] = {0};
+        unsigned int occur[number] = {0};
 
-    std::cout << std::endl << std::endl;
-    const int number = 9;
-    unsigned int counter = 0;
-    int found[number] = {0};
-    unsigned int occur[number] = {0};
+        printf("Hand#     Classification       Poker Hand\n");
+        printf("-----     --------------       -----------\n");
 
-    std::cout << "Hand#     Classification       Poker Hand" << std::endl;
-    std::cout << "-----" << "     --------------       -----------" << std::endl;
-
-    for (unsigned int d = 0; d < 50000; d++) {
-        bool test_deck = deck.deckEmpty();
-        if (test_deck) {
-            deck.shuffle();
+        for (unsigned int d = 0; d < 50000; d++) {
+            bool test_deck = deck.deckEmpty();
+            if (test_deck) {
+                deck.shuffle();
+            }
+            for (int i = 0; i < 5; i++) {
+                playingCard card = deck.deal();
+                poker_hand.insert_card(card.theRank(), card.theSuit(), i);
+            }
+            poker_hand.sort_hand();
+            ++counter;
+            classify_hand(poker_hand, found, occur, counter);
         }
-        for (int i = 0; i < 5; i++) {
-            playingCard card = deck.deal();
-            poker_hand.insert_card(card.theRank(), card.theSuit(), i);
-        }
-        poker_hand.sort_hand();
-        ++counter;
-        classify_hand(poker_hand, found, occur, counter);
-    }
 
-    std::cout << std::endl << std::endl;
-    for (int k = 0; k < 9; k++) {
-        std::cout << std::endl
-                  << "     ";
-        std::cout << std::setw(5)
-                  << std::setiosflags(std::ios::right);
-        switch (k) {
-            case 0:
-                std::cout << occur[k] << "     " << "PLAIN";
-                break;
-            case 1:
-                std::cout << occur[k] << "     " << "ONE_PAIR";
-                break;
-            case 2:
-                std::cout << occur[k] << "     " << "TWO_PAIR";
-                break;
-            case 3:
-                std::cout << occur[k] << "     " << "THREE_OF_A_KIND";
-                break;
-            case 4:
-                std::cout << occur[k] << "     " << "STRAIGHT";
-                break;
-            case 5:
-                std::cout << occur[k] << "     " << "FLUSH";
-                break;
-            case 6:
-                std::cout << occur[k] << "     " << "FULL_HOUSE";
-                break;
-            case 7:
-                std::cout << occur[k] << "     " << "FOUR_OF_A_KIND";
-                break;
-            case 8:
-                std::cout << occur[k] << "     " << "STRAIGHT_FLUSH";
-                break;
+        printf("\n\n");
+        for (int k = 0; k < 9; k++) {
+            printf("\n     %5d     ", occur[k]);
+            switch (k) {
+                case 0:
+                    printf("PLAIN");
+                    break;
+                case 1:
+                    printf("ONE_PAIR");
+                    break;
+                case 2:
+                    printf("TWO_PAIR");
+                    break;
+                case 3:
+                    printf("THREE_OF_A_KIND");
+                    break;
+                case 4:
+                    printf("STRAIGHT");
+                    break;
+                case 5:
+                    printf("FLUSH");
+                    break;
+                case 6:
+                    printf("FULL_HOUSE");
+                    break;
+                case 7:
+                    printf("FOUR_OF_A_KIND");
+                    break;
+                case 8:
+                    printf("STRAIGHT_FLUSH");
+                    break;
+            }
         }
-    }
-    std::cout << std::endl << std::endl << std::endl;
+        printf("\n\n\n");
+
+        printf("Generate another hand? (y/n): ");
+        // Clear input buffer before getting new char
+        while (getchar() != '\n');
+        choice = getchar();
+
+    } while (choice == 'y' || choice == 'Y');
 }
 
 void printTable() {
-    std::cout << "                              DEALER [D]" << std::endl;
-    std::cout << "                             [??] [??]" << std::endl;
-    std::cout << std::endl;
-    std::cout << "            .----------------------------------------------." << std::endl;
-    std::cout << "          .'                                                .'" << std::endl;
-    std::cout << "         /                                                    \\" << std::endl;
-    std::cout << "        /                                                      \\" << std::endl;
-    std::cout << "       |                   COMMUNITY CARDS                      |" << std::endl;
-    std::cout << "       |                [    ] [    ] [    ] [    ] [    ]      |" << std::endl;
-    std::cout << "       |                       POT: $______                     |" << std::endl;
-    std::cout << "        \\                                                      /" << std::endl;
-    std::cout << "         \\                                                    /" << std::endl;
-    std::cout << "          '.                                                .'" << std::endl;
-    std::cout << "            '----------------------------------------------'" << std::endl;
-    std::cout << std::endl;
-    std::cout << "                               PLAYER" << std::endl;
-    std::cout << "                             [    ] [    ]" << std::endl;
+    printf("                              DEALER [D]\n");
+    printf("                             [??] [??]\n");
+    printf("\n");
+    printf("            .----------------------------------------------.\n");
+    printf("          .'                                                .'\n");
+    printf("         /                                                    \\\n");
+    printf("        /                                                      \\\n");
+    printf("       |                   COMMUNITY CARDS                      |\n");
+    printf("       |                [    ] [    ] [    ] [    ] [    ]      |\n");
+    printf("       |                       POT: $______                     |\n");
+    printf("        \\                                                      /\n");
+    printf("         \\                                                    /\n");
+    printf("          '.                                                .'\n");
+    printf("            '----------------------------------------------'\n");
+    printf("\n");
+    printf("                                PLAYER\n");
+    printf("                             [    ] [    ]\n");
 }
 
+
 void playTexasHoldem() {
+    deckOfCards deck;
+    deck.shuffle();
+    srand((unsigned) time(NULL));
+
+    classify player_hand;
+    classify dealer_hand;
+
+    // Deal two cards to the player
+    for (int i = 0; i < 2; ++i) {
+        playingCard card = deck.deal();
+        player_hand.insert_card(card.theRank(), card.theSuit(), i);
+    }
+
+    // Deal two cards to the dealer
+    for (int i = 0; i < 2; ++i) {
+        playingCard card = deck.deal();
+        dealer_hand.insert_card(card.theRank(), card.theSuit(), i);
+    }
+
+    printf("\nPress any key to start the game...");
+    getchar(); // Wait for user input
+
     printTable();
+
+    printf("\nDealer's cards: [??] [??]");
+    printf("\nYour cards: ");
+    player_hand.print();
+    printf("\n");
 }
 
 int main() {
     int choice;
-    std::cout << "\n";
-    std::cout << "Please select a game to play:\n";
-    std::cout << "1.) Play Poker Hand Classification\n";
-    std::cout << "2.) Play Texas Hold'em\n";
-    std::cout << "Enter your choice: ";
-    std::cin >> choice;
+    printf("\n");
+    printf("Please select a game to play:\n");
+    printf("1.) Play Poker Hand Classification\n");
+    printf("2.) Play Texas Hold'em\n");
+    printf("Enter your choice: ");
+    scanf("%d", &choice);
 
     switch (choice) {
         case 1:
@@ -205,7 +236,7 @@ int main() {
             playTexasHoldem();
             break;
         default:
-            std::cout << "Invalid choice. Exiting.\n";
+            printf("Invalid choice. Exiting.\n");
             break;
     }
 
