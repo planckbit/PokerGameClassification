@@ -168,25 +168,26 @@ void playPokerClassification() {
 }
 
 void printTable() {
-    printf("\n"); 	
-    printf("                             DEALER [D]\n");
-    printf("                             [??] [??]\n");
-    printf("\n");
-    printf("            .----------------------------------------------.\n");
-    printf("          .'                                                .'\n");
-    printf("         /                    TEXAS HOLD'EM                   \\\n");
-    printf("        /                                                      \\\n");
-    printf("       |                                                        |\n");
-    printf("       |          [    ] [    ] [    ] [    ] [    ]            |\n");
-    printf("       |                                                        |\n");
-    printf("        \\                                                      /\n");
-    printf("         \\                                                    /\n");
-    printf("          '.                   POT: $______                 .'\n");
-    printf("            '----------------------------------------------'\n");
-    printf("\n");
-    printf("                              PLAYER\n");
-    printf("                             [??] [??]\n");
+    printf(R"(
+                  DEALER [D]
+                  [2♣] [2♣]
+
+    ----------------------------------------------------
+  /                                                    \
+ |                      TEXAS HOLD'EM                     |
+ |                                                      |
+ |        [ ]   [ ]   [ ]   [ ]   [ ]   [ ]   [ ]         |
+  \                                                    /
+    ----------------------------------------------------
+
+                  POT: $______
+
+                    PLAYER
+                    [2♣] [2♣]
+
+)");
 }
+
 
 
 void playTexasHoldem() {
