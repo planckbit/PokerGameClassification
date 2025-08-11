@@ -168,23 +168,24 @@ void playPokerClassification() {
 }
 
 void printTable() {
-    printf("                              DEALER [D]\n");
+    printf("\n"); 	
+    printf("                             DEALER [D]\n");
     printf("                             [??] [??]\n");
     printf("\n");
     printf("            .----------------------------------------------.\n");
     printf("          .'                                                .'\n");
-    printf("         /                                                    \\\n");
+    printf("         /                    TEXAS HOLD'EM                   \\\n");
     printf("        /                                                      \\\n");
-    printf("       |                   COMMUNITY CARDS                      |\n");
-    printf("       |                [    ] [    ] [    ] [    ] [    ]      |\n");
-    printf("       |                       POT: $______                     |\n");
+    printf("       |                                                        |\n");
+    printf("       |          [    ] [    ] [    ] [    ] [    ]            |\n");
+    printf("       |                                                        |\n");
     printf("        \\                                                      /\n");
     printf("         \\                                                    /\n");
-    printf("          '.                                                .'\n");
+    printf("          '.                   POT: $______                 .'\n");
     printf("            '----------------------------------------------'\n");
     printf("\n");
-    printf("                                PLAYER\n");
-    printf("                             [    ] [    ]\n");
+    printf("                              PLAYER\n");
+    printf("                             [??] [??]\n");
 }
 
 
@@ -211,6 +212,7 @@ void playTexasHoldem() {
     printf("\nPress any key to start the game...");
     getchar(); // Wait for user input
 
+    printf("\n\n");
     printTable();
 
     printf("\nDealer's cards: [??] [??]");
