@@ -14,6 +14,7 @@ void classify_hand(classify, int [], unsigned int [], unsigned int);
 void playPokerClassification();
 void playTexasHoldem();
 void printTable();
+void clearScreen();
 
 void classify_hand(classify poker_hand, int found[], unsigned int occur[], unsigned int counter) {
     auto print_hand = [&](const char* classification) {
@@ -167,29 +168,47 @@ void playPokerClassification() {
     } while (choice == 'y' || choice == 'Y');
 }
 
-void printTable(const std::string& dealerCards, const std::string& playerCards) {
+void printTable(const std::string& dealerCards, const std::string& playerCards, const std::string& flopCards = "") {
+    // Calculate padding to center the flop cards
+    int totalWidth = 41; // Width of the table between the vertical bars
+    int flopWidth = flopCards.length();
+    int padding = (totalWidth > flopWidth) ? (totalWidth - flopWidth) / 2 : 0;
+    std::string leftPadding(padding, ' ');
+    std::string rightPadding((totalWidth > flopWidth) ? totalWidth - flopWidth - padding : 0, ' ');
+
     printf(R"(
                      DEALER [D]
                      %s
 
-   ----------------------------------------------------
-  /                                                    \
- |                    TEXAS HOLD'EM                     |
- |                                                      |
- |        [ ]   [ ]   [ ]   [ ]   [ ]   [ ]   [ ]       |
- \                                                      /
-  \                                                    /
-   \                   POT $_____                     /
-    \                                                /
-     ------------------------------------------------
+              +---------------------------+
+             /                             \
+            /                               \
+           /                                 \
+          /                                   \
+         /                                     \
+        /                                       \
+       +                                         +
+       |           TEXAS HOLD'EM TABLE           |
+              %s%s%s
+       +                                         +
+        \                                       /
+         \                                     /
+          \                                   /
+           \                                 /
+            \                               /
+             \                             /
+              +---------------------------+
 
                       PLAYER
                      %s
 
-)", dealerCards.c_str(), playerCards.c_str());
+)", dealerCards.c_str(), leftPadding.c_str(), flopCards.c_str(), rightPadding.c_str(), playerCards.c_str());
 }
 
-
+void clearScreen() {
+    // Clear the console screen
+    system("clear");
+}
 
 void playTexasHoldem() {
     deckOfCards deck;
@@ -228,9 +247,51 @@ void playTexasHoldem() {
             dealerCards += "[" + card.toString() + "] ";
         }
 
+        clearScreen(); // Clear the screen before showing the table
         printTable(dealerCards, playerCards);
         printf("\nDealer Hand: %s", dealerCards.c_str());
         printf("\nPlayer Hand: %s\n", playerCards.c_str());
+
+        // Prompt to deal the flop
+        printf("\nDeal the Flop (y/n): ");
+        scanf(" %c", &choice);
+
+        if (choice == 'y' || choice == 'Y') {
+            std::string flopCards = "";
+            for (int i = 0; i < 3; ++i) {
+                playingCard card = deck.deal();
+                flopCards += "[" + card.toString() + "] ";
+            }
+
+            clearScreen(); // Clear the screen before showing the flop
+            printTable(dealerCards, playerCards, flopCards);
+
+            // Prompt to deal the turn
+            printf("\nDeal the Turn (y/n): ");
+            scanf(" %c", &choice);
+
+            if (choice == 'y' || choice == 'Y') {
+                std::string turnCard = "";
+                playingCard card = deck.deal();
+                turnCard = "[" + card.toString() + "] ";
+
+                clearScreen(); // Clear the screen before showing the turn
+                printTable(dealerCards, playerCards, flopCards + turnCard);
+
+                // Prompt to deal the river
+                printf("\nDeal the River (y/n): ");
+                scanf(" %c", &choice);
+
+                if (choice == 'y' || choice == 'Y') {
+                    std::string riverCard = "";
+                    playingCard card = deck.deal();
+                    riverCard = "[" + card.toString() + "] ";
+
+                    clearScreen(); // Clear the screen before showing the river
+                    printTable(dealerCards, playerCards, flopCards + turnCard + riverCard);
+                }
+            }
+        }
     }
 }
 

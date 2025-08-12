@@ -70,7 +70,7 @@ playingCard deckOfCards::deal() {
         if (deck[card_dealt] == 1) {
             //card found, determine the suit and rank
             c = (card_dealt / divisor);
-            r = (card_dealt % divisor);
+            r = (card_dealt % divisor) + 2; // Adjust rank to start from 2
             //remove card from deck, by setting this element to zero
             deck[card_dealt] = 0;
             //decrement the number of cards in the deck
@@ -95,5 +95,5 @@ void deckOfCards::shuffle() {
         deck[i]=1;
      }   
      cardsInDeck=52;
-}        
+}
 
