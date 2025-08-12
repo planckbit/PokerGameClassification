@@ -177,9 +177,8 @@ void printTable(const std::string& dealerCards, const std::string& playerCards, 
     std::string rightPadding((totalWidth > flopWidth) ? totalWidth - flopWidth - padding : 0, ' ');
 
     printf(R"(
-                     DEALER [D]
+                       DEALER
                      %s
-
               +---------------------------+
              /                             \
             /                               \
@@ -198,9 +197,8 @@ void printTable(const std::string& dealerCards, const std::string& playerCards, 
             \                               /
              \                             /
               +---------------------------+
-
-                      PLAYER
-                     %s
+                       PLAYER
+                      %s
 
 )", dealerCards.c_str(), leftPadding.c_str(), flopCards.c_str(), rightPadding.c_str(), playerCards.c_str());
 }
@@ -218,19 +216,19 @@ void playTexasHoldem() {
     classify player_hand;
     classify dealer_hand;
 
-    printf("\nPress any key to start the game...");
-    getchar(); // Wait for user input
+    clearScreen(); // Clear the screen before showing the table
 
-    printf("\n\n");
+    std::string dealerCards = "[??] [??]";
+    std::string playerCards = "[??] [??]";
+
+    // Present the table immediately
+    printTable(dealerCards, playerCards);
 
     char choice;
     printf("\nDeal Cards (y/n): ");
     scanf(" %c", &choice);
 
     if (choice == 'y' || choice == 'Y') {
-        std::string dealerCards = "[??] [??]";
-        std::string playerCards = "[??] [??]";
-
         // Deal two cards to the player
         playerCards = "";
         for (int i = 0; i < 2; ++i) {
@@ -265,6 +263,8 @@ void playTexasHoldem() {
 
             clearScreen(); // Clear the screen before showing the flop
             printTable(dealerCards, playerCards, flopCards);
+            printf("\nDealer Hand: %s%s", dealerCards.c_str(), flopCards.c_str());
+            printf("\nPlayer Hand: %s%s\n", playerCards.c_str(), flopCards.c_str());
 
             // Prompt to deal the turn
             printf("\nDeal the Turn (y/n): ");
@@ -277,6 +277,8 @@ void playTexasHoldem() {
 
                 clearScreen(); // Clear the screen before showing the turn
                 printTable(dealerCards, playerCards, flopCards + turnCard);
+                printf("\nDealer Hand: %s%s%s", dealerCards.c_str(), flopCards.c_str(), turnCard.c_str());
+                printf("\nPlayer Hand: %s%s%s\n", playerCards.c_str(), flopCards.c_str(), turnCard.c_str());
 
                 // Prompt to deal the river
                 printf("\nDeal the River (y/n): ");
@@ -289,6 +291,8 @@ void playTexasHoldem() {
 
                     clearScreen(); // Clear the screen before showing the river
                     printTable(dealerCards, playerCards, flopCards + turnCard + riverCard);
+                    printf("\nDealer Hand: %s%s%s%s", dealerCards.c_str(), flopCards.c_str(), turnCard.c_str(), riverCard.c_str());
+                    printf("\nPlayer Hand: %s%s%s%s\n", playerCards.c_str(), flopCards.c_str(), turnCard.c_str(), riverCard.c_str());
                 }
             }
         }
@@ -296,6 +300,8 @@ void playTexasHoldem() {
 }
 
 int main() {
+    clearScreen(); // Clear the screen before presenting the menu
+
     int choice;
     printf("\n");
     printf("Please select a game to play:\n");
