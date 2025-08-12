@@ -152,20 +152,13 @@ int classify::straight_flush() const {
 }
 
 int classify::flush() const {
-     int test=1;
-     int k=0;
-     while(test!=0) {
-	  if(store_suit[k]==store_suit[k+1] && k<hand-1) {
-	      ++k;      //condition is true so continue loop
-	  }
-	  else if(k==hand-1) {
-               return 1;  //flush found in hand
-          }
-          else {
-	       test=0;    //terminate the loop
-          }  
-      }
-      return 0;      //loop terminated on no flush found, so return 0
+     // Check if all cards have the same suit
+     for (int i = 0; i < hand - 1; ++i) {
+         if (store_suit[i] != store_suit[i + 1]) {
+             return 0; // Not a flush
+         }
+     }
+     return 1; // All cards have the same suit, it's a flush
 }
 
 int classify::straight() const {
@@ -207,42 +200,48 @@ int classify::full_house() const {
 }
 
 int classify::three_kind() const {
-     int k=0;
-     if(store_rank[k]==store_rank[k+2] || store_rank[k+1]==store_rank[k+3]) {
-	  return 1; //three of a kind was found
-     }
-     else if(store_rank[k+2]==store_rank[k+4]) {
-	  return 1; //three of a kind was found
-     }
-     else {
-	  return 0; //three of a kind was not found
-     }
+    // Check for exactly three cards of the same rank
+    for (int i = 0; i < hand - 2; ++i) {
+        if (store_rank[i] == store_rank[i + 1] && store_rank[i] == store_rank[i + 2]) {
+            // Ensure it's not part of a four-of-a-kind or full house
+            if ((i > 0 && store_rank[i - 1] == store_rank[i]) || (i + 3 < hand && store_rank[i + 3] == store_rank[i])) {
+                continue; // Skip if part of a larger group
+            }
+            return 1; // Three-of-a-Kind found
+        }
+    }
+    return 0; // No Three-of-a-Kind found
 }
 
 int classify::two_pair() const {
-     int k=0;
-     if(store_rank[k]==store_rank[k+1] && store_rank[k+2]==store_rank[k+3]) {
-	  return 1;  //two pair found
-     }
-     else if(store_rank[k]==store_rank[k+1] && store_rank[k+3]==store_rank[k+4]) {
-	  return 1;  //two pair found
-     }
-     else {
-	  return 0;
-     }
+    // Check for exactly two pairs in the hand
+    int pairCount = 0;
+    for (int i = 0; i < hand - 1; ++i) {
+        if (store_rank[i] == store_rank[i + 1]) {
+            ++pairCount;
+            ++i; // Skip the next card as it's part of the pair
+        }
+    }
+    return pairCount == 2 ? 1 : 0; // Return true if exactly two pairs are found
 }
 
 int classify::one_pair() const {
-     int k=0;
-     if(store_rank[k]==store_rank[k+1] || store_rank[k+1]==store_rank[k+2]) {
-	  return 1; //one pair found
-     }
-     else if(store_rank[k+2]==store_rank[k+3] || store_rank[k+3]==store_rank[k+4]) {
-	  return 1; //one pair found
-     }
-     else {
-	 return 0;
-     }
+    // Debugging: Print the ranks being evaluated
+    printf("Evaluating for one pair. Ranks: ");
+    for (int i = 0; i < hand; ++i) {
+        printf("%d ", store_rank[i]);
+    }
+    printf("\n");
+
+    // Check for exactly one pair in the hand
+    int pairCount = 0;
+    for (int i = 0; i < hand - 1; ++i) {
+        if (store_rank[i] == store_rank[i + 1]) {
+            ++pairCount;
+            ++i; // Skip the next card as it's part of the pair
+        }
+    }
+    return pairCount == 1 ? 1 : 0; // Return true if exactly one pair is found
 }
 
 int classify::plain() const {
@@ -257,4 +256,28 @@ int classify::plain() const {
           return 0;
      }
      return 1; //a plain hand was found
+}
+
+void classify::debug_print_hand() const {
+    printf("Ranks: ");
+    for (int i = 0; i < hand; ++i) {
+        printf("%d ", store_rank[i]);
+    }
+    printf("\nSuits: ");
+    for (int i = 0; i < hand; ++i) {
+        printf("%d ", store_suit[i]);
+    }
+    printf("\n");
+}
+
+std::string classify::determine_hand() const {
+    if (straight_flush()) return "Straight Flush";
+    if (four_kind()) return "Four-of-a-Kind";
+    if (full_house()) return "Full House";
+    if (flush()) return "Flush";
+    if (straight()) return "Straight";
+    if (three_kind()) return "Three-of-a-Kind";
+    if (two_pair()) return "Two Pair";
+    if (one_pair()) return "One Pair";
+    return "High Card";
 }

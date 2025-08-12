@@ -6,8 +6,13 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string> // For std::string
+#include <vector> // For std::vector
 #include "cards.h"
 #include "classify.h"
+
+// Function to classify the best possible hand
+std::string classifyBestHand(const classify& handClassifier);
+std::string classifyBestHand(const std::vector<playingCard>& cards);
 
 //Used for classify the hand
 void classify_hand(classify, int [], unsigned int [], unsigned int);
@@ -209,6 +214,10 @@ void clearScreen() {
 }
 
 void playTexasHoldem() {
+    std::vector<playingCard> communityCards; // To store community cards
+    std::vector<playingCard> dealerPrivateCards; // To store dealer's private cards
+    std::vector<playingCard> playerPrivateCards; // To store player's private cards
+
     deckOfCards deck;
     deck.shuffle();
     srand((unsigned) time(NULL));
@@ -233,7 +242,7 @@ void playTexasHoldem() {
         playerCards = "";
         for (int i = 0; i < 2; ++i) {
             playingCard card = deck.deal();
-            player_hand.insert_card(card.theRank(), card.theSuit(), i);
+            playerPrivateCards.push_back(card);
             playerCards += "[" + card.toString() + "] ";
         }
 
@@ -241,7 +250,7 @@ void playTexasHoldem() {
         dealerCards = "";
         for (int i = 0; i < 2; ++i) {
             playingCard card = deck.deal();
-            dealer_hand.insert_card(card.theRank(), card.theSuit(), i);
+            dealerPrivateCards.push_back(card);
             dealerCards += "[" + card.toString() + "] ";
         }
 
@@ -258,6 +267,7 @@ void playTexasHoldem() {
             std::string flopCards = "";
             for (int i = 0; i < 3; ++i) {
                 playingCard card = deck.deal();
+                communityCards.push_back(card);
                 flopCards += "[" + card.toString() + "] ";
             }
 
@@ -273,6 +283,7 @@ void playTexasHoldem() {
             if (choice == 'y' || choice == 'Y') {
                 std::string turnCard = "";
                 playingCard card = deck.deal();
+                communityCards.push_back(card);
                 turnCard = "[" + card.toString() + "] ";
 
                 clearScreen(); // Clear the screen before showing the turn
@@ -287,40 +298,93 @@ void playTexasHoldem() {
                 if (choice == 'y' || choice == 'Y') {
                     std::string riverCard = "";
                     playingCard card = deck.deal();
+                    communityCards.push_back(card);
                     riverCard = "[" + card.toString() + "] ";
 
                     clearScreen(); // Clear the screen before showing the river
                     printTable(dealerCards, playerCards, flopCards + turnCard + riverCard);
                     printf("\nDealer Hand: %s%s%s%s", dealerCards.c_str(), flopCards.c_str(), turnCard.c_str(), riverCard.c_str());
                     printf("\nPlayer Hand: %s%s%s%s\n", playerCards.c_str(), flopCards.c_str(), turnCard.c_str(), riverCard.c_str());
+
+                    // Combine private and community cards for classification
+                    std::vector<playingCard> dealerAllCards = dealerPrivateCards;
+                    dealerAllCards.insert(dealerAllCards.end(), communityCards.begin(), communityCards.end());
+
+                    std::vector<playingCard> playerAllCards = playerPrivateCards;
+                    playerAllCards.insert(playerAllCards.end(), communityCards.begin(), communityCards.end());
+
+                    // Classify the best hands
+                    std::string dealerBestHand = classifyBestHand(dealerAllCards);
+                    std::string playerBestHand = classifyBestHand(playerAllCards);
+
+                    // Display the best hands
+                    printf("\nDealer Best Hand: %s", dealerBestHand.c_str());
+                    printf("\nPlayer Best Hand: %s\n", playerBestHand.c_str());
                 }
             }
         }
     }
 }
 
-int main() {
-    clearScreen(); // Clear the screen before presenting the menu
+std::string classifyBestHand(const classify& handClassifier) {
+    if (handClassifier.straight_flush()) return "Straight Flush";
+    if (handClassifier.four_kind()) return "Four-of-a-Kind";
+    if (handClassifier.full_house()) return "Full House";
+    if (handClassifier.flush()) return "Flush";
+    if (handClassifier.straight()) return "Straight";
+    if (handClassifier.three_kind()) return "Three-of-a-Kind";
+    if (handClassifier.two_pair()) return "Two Pair";
+    if (handClassifier.one_pair()) return "One Pair";
+    return "High Card";
+}
 
-    int choice;
-    printf("\n");
-    printf("Please select a game to play:\n");
-    printf("1.) Play Poker Hand Classification\n");
-    printf("2.) Play Texas Hold'em\n");
-    printf("Enter your choice: ");
-    scanf("%d", &choice);
-
-    switch (choice) {
-        case 1:
-            playPokerClassification();
-            break;
-        case 2:
-            playTexasHoldem();
-            break;
-        default:
-            printf("Invalid choice. Exiting.\n");
-            break;
+std::string classifyBestHand(const std::vector<playingCard>& cards) {
+    classify handClassifier;
+    for (size_t i = 0; i < cards.size(); ++i) {
+        handClassifier.insert_card(cards[i].theRank(), cards[i].theSuit(), i);
     }
+    handClassifier.sort_hand();
 
+    if (handClassifier.straight_flush()) return "Straight Flush";
+    if (handClassifier.four_kind()) return "Four-of-a-Kind";
+    if (handClassifier.full_house()) return "Full House";
+    if (handClassifier.flush()) return "Flush";
+    if (handClassifier.straight()) return "Straight";
+    if (handClassifier.three_kind()) return "Three-of-a-Kind";
+    if (handClassifier.two_pair()) return "Two Pair";
+    if (handClassifier.one_pair()) return "One Pair";
+    return "High Card";
+}
+
+int main() {
+    char choice;
+    do {
+        clearScreen(); // Clear the screen before presenting the menu
+
+        int gameChoice;
+        printf("\n");
+        printf("Please select a game to play:\n");
+        printf("1.) Play Poker Hand Classification\n");
+        printf("2.) Play Texas Hold'em\n");
+        printf("Enter your choice: ");
+        scanf("%d", &gameChoice);
+
+        switch (gameChoice) {
+            case 1:
+                playPokerClassification();
+                break;
+            case 2:
+                playTexasHoldem();
+                break;
+            default:
+                printf("Invalid choice. Exiting.\n");
+                return 0;
+        }
+
+        printf("\nPlay Again (y/n): ");
+        scanf(" %c", &choice);
+    } while (choice == 'y' || choice == 'Y');
+
+    printf("\nThank you for playing!\n");
     return 0;
 }

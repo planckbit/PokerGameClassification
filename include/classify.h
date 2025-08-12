@@ -33,9 +33,11 @@ class classify {
      //print a hand
      void print() const;
      void print_hidden() const;
+     void debug_print_hand() const; // Debug print function
      
      //modifiers
      void insert_card(cardRank, cardSuit, int);
      void sort_hand();
+     std::string determine_hand() const;
 };
-#endif     
+#endif
