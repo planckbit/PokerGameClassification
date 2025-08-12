@@ -5,6 +5,8 @@
 #ifndef CARDS_H
 #define CARDS_H
 
+#include <string>
+
 enum cardSuit {CLUBS, DIAMONDS, HEARTS, SPADES};
 
 typedef int cardRank; //2=deuce, 3=trey, 4=four,... 10=ten,
@@ -25,6 +27,29 @@ class playingCard {
 
 	//display
 	void print() const; //for example: 2S, 9D, TH, QC, AD
+	std::string toString() const {
+            std::string rankStr;
+            if (rank >= 2 && rank <= 10) {
+                rankStr = std::to_string(rank);
+            } else {
+                switch (rank) {
+                    case 11: rankStr = "J"; break;
+                    case 12: rankStr = "Q"; break;
+                    case 13: rankStr = "K"; break;
+                    case 14: rankStr = "A"; break;
+                }
+            }
+
+            std::string suitStr;
+            switch (suit) {
+                case CLUBS: suitStr = "\u2663"; break; // ♣
+                case DIAMONDS: suitStr = "\u2666"; break; // ♦
+                case HEARTS: suitStr = "\u2665"; break; // ♥
+                case SPADES: suitStr = "\u2660"; break; // ♠
+            }
+
+            return rankStr + suitStr;
+        }
 };
 
 class deckOfCards {

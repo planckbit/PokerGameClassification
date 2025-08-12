@@ -167,25 +167,26 @@ void playPokerClassification() {
     } while (choice == 'y' || choice == 'Y');
 }
 
-void printTable() {
+void printTable(const std::string& dealerCards, const std::string& playerCards) {
     printf(R"(
-                  DEALER [D]
-                  [2♣] [2♣]
+                     DEALER [D]
+                     %s
 
-    ----------------------------------------------------
+   ----------------------------------------------------
   /                                                    \
- |                      TEXAS HOLD'EM                     |
+ |                    TEXAS HOLD'EM                     |
  |                                                      |
- |        [ ]   [ ]   [ ]   [ ]   [ ]   [ ]   [ ]         |
+ |        [ ]   [ ]   [ ]   [ ]   [ ]   [ ]   [ ]       |
+ \                                                      /
   \                                                    /
-    ----------------------------------------------------
+   \                   POT $_____                     /
+    \                                                /
+     ------------------------------------------------
 
-                  POT: $______
+                      PLAYER
+                     %s
 
-                    PLAYER
-                    [2♣] [2♣]
-
-)");
+)", dealerCards.c_str(), playerCards.c_str());
 }
 
 
@@ -198,28 +199,39 @@ void playTexasHoldem() {
     classify player_hand;
     classify dealer_hand;
 
-    // Deal two cards to the player
-    for (int i = 0; i < 2; ++i) {
-        playingCard card = deck.deal();
-        player_hand.insert_card(card.theRank(), card.theSuit(), i);
-    }
-
-    // Deal two cards to the dealer
-    for (int i = 0; i < 2; ++i) {
-        playingCard card = deck.deal();
-        dealer_hand.insert_card(card.theRank(), card.theSuit(), i);
-    }
-
     printf("\nPress any key to start the game...");
     getchar(); // Wait for user input
 
     printf("\n\n");
-    printTable();
 
-    printf("\nDealer's cards: [??] [??]");
-    printf("\nYour cards: ");
-    player_hand.print();
-    printf("\n");
+    char choice;
+    printf("\nDeal Cards (y/n): ");
+    scanf(" %c", &choice);
+
+    if (choice == 'y' || choice == 'Y') {
+        std::string dealerCards = "[??] [??]";
+        std::string playerCards = "[??] [??]";
+
+        // Deal two cards to the player
+        playerCards = "";
+        for (int i = 0; i < 2; ++i) {
+            playingCard card = deck.deal();
+            player_hand.insert_card(card.theRank(), card.theSuit(), i);
+            playerCards += "[" + card.toString() + "] ";
+        }
+
+        // Deal two cards to the dealer
+        dealerCards = "";
+        for (int i = 0; i < 2; ++i) {
+            playingCard card = deck.deal();
+            dealer_hand.insert_card(card.theRank(), card.theSuit(), i);
+            dealerCards += "[" + card.toString() + "] ";
+        }
+
+        printTable(dealerCards, playerCards);
+        printf("\nDealer Hand: %s", dealerCards.c_str());
+        printf("\nPlayer Hand: %s\n", playerCards.c_str());
+    }
 }
 
 int main() {
