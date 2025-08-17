@@ -259,6 +259,10 @@ void playTexasHoldem() {
         printf("\nDealer Hand: %s", dealerCards.c_str());
         printf("\nPlayer Hand: %s\n", playerCards.c_str());
 
+        // Debugging: Log the dealer and player cards
+        printf("\nDebug: Dealer Cards = %s\n", dealerCards.c_str());
+        printf("Debug: Player Cards = %s\n", playerCards.c_str());
+
         // Prompt to deal the flop
         printf("\nDeal the Flop (y/n): ");
         scanf(" %c", &choice);

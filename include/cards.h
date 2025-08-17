@@ -43,8 +43,8 @@ class playingCard {
             std::string suitStr;
             switch (suit) {
                 case CLUBS: suitStr = "\u2663"; break; // ♣
-                case DIAMONDS: suitStr = "\u2666"; break; // ♦
-                case HEARTS: suitStr = "\u2665"; break; // ♥
+                case DIAMONDS: suitStr = "\033[31m\u2666\033[0m"; break; // ♦ (red)
+                case HEARTS: suitStr = "\033[31m\u2665\033[0m"; break; // ♥ (red)
                 case SPADES: suitStr = "\u2660"; break; // ♠
             }
 

@@ -74,10 +74,16 @@ void classify::print() const {
 
           if (suit_card >= 0 && suit_card <= 3) {
               switch(suit_card) {
-              case 0: printf("♣"); break;
-              case 1: printf("\033[31m♦\033[0m"); break;
-              case 2: printf("\033[31m♥\033[0m"); break;
-              case 3: printf("♠"); break;
+              case 0:
+                 printf("♣"); break; // Clubs
+              case 1:
+                 printf("\033[31m♦\033[0m"); break; // Diamonds (red)
+              case 2:
+                 printf("\033[31m♥\033[0m"); break; // Hearts (red)
+              case 3:
+                 printf("♠"); break; // Spades
+              default:
+                 printf("? (Invalid suit: %d)", suit_card); // Debugging invalid suit
               }
           } else {
               printf("?"); // Placeholder for invalid suit
@@ -109,10 +115,14 @@ void classify::print_hidden() const {
     }
 
     switch(suit_card) {
-        case 0: printf("♣"); break;
-        case 1: printf("\033[31m♦\033[0m"); break;
-        case 2: printf("\033[31m♥\033[0m"); break;
-        case 3: printf("♠"); break;
+        case 0:
+           printf("♣"); break; // Clubs
+        case 1:
+           printf("\033[31m♦\033[0m"); break; // Diamonds (red)
+        case 2:
+           printf("\033[31m♥\033[0m"); break; // Hearts (red)
+        case 3:
+           printf("♠"); break; // Spades
     }
     printf("] ");
 
