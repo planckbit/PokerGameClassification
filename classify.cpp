@@ -215,6 +215,13 @@ int classify::three_kind() const {
 }
 
 int classify::two_pair() const {
+    // Debugging: Print the ranks being evaluated
+    printf("Evaluating for two pairs. Ranks: ");
+    for (int i = 0; i < hand; ++i) {
+        printf("%d ", store_rank[i]);
+    }
+    printf("\n");
+
     // Check for exactly two pairs in the hand
     int pairCount = 0;
     for (int i = 0; i < hand - 1; ++i) {
