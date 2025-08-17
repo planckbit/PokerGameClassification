@@ -48,51 +48,42 @@ void classify::sort_hand() {
 // the hand will never exceed 5 cards
 void classify::print() const {
      for(int j=0; j<hand; j++) {
-	  int rank_card=store_rank[j];
-	  int suit_card=store_suit[j];
+          int rank_card=store_rank[j];
+          int suit_card=store_suit[j];
 
-      printf("[");
-	  switch(rank_card) {
-	   case 0:
-	      printf("2"); break;
-	   case 1:
-	      printf("3"); break;
-	   case 2:
-	      printf("4"); break;
-	   case 3:
-	      printf("5"); break;
-	   case 4:
-	      printf("6"); break;
-	   case 5:
-	      printf("7"); break;
-	   case 6:
-	      printf("8"); break;
-	   case 7:
-	      printf("9"); break;
-	   case 8:
-	      printf("10"); break;
-	   case 9:
-	      printf("J"); break;
-	   case 10:
-	      printf("Q"); break;
-	   case 11:
-	      printf("K"); break;
-	   case 12:
-	      printf("A"); break;
-	   }
+          printf("[");
+          if (rank_card >= 0 && rank_card <= 12) {
+              switch(rank_card) {
+              case 0: printf("2"); break;
+              case 1: printf("3"); break;
+              case 2: printf("4"); break;
+              case 3: printf("5"); break;
+              case 4: printf("6"); break;
+              case 5: printf("7"); break;
+              case 6: printf("8"); break;
+              case 7: printf("9"); break;
+              case 8: printf("10"); break;
+              case 9: printf("J"); break;
+              case 10: printf("Q"); break;
+              case 11: printf("K"); break;
+              case 12: printf("A"); break;
+              }
+          } else {
+              printf("?"); // Placeholder for invalid rank
+          }
 
-           switch(suit_card) {
-            case 0:
-               printf("♣"); break;
-            case 1:
-               printf("\033[31m♦\033[0m"); break;
-            case 2:
-               printf("\033[31m♥\033[0m"); break;
-            case 3:
-               printf("♠"); break;
-            }
-        printf("] ");
-       }
+          if (suit_card >= 0 && suit_card <= 3) {
+              switch(suit_card) {
+              case 0: printf("♣"); break;
+              case 1: printf("\033[31m♦\033[0m"); break;
+              case 2: printf("\033[31m♥\033[0m"); break;
+              case 3: printf("♠"); break;
+              }
+          } else {
+              printf("?"); // Placeholder for invalid suit
+          }
+          printf("] ");
+      }
  }
 
 void classify::print_hidden() const {
@@ -226,13 +217,6 @@ int classify::two_pair() const {
 }
 
 int classify::one_pair() const {
-    // Debugging: Print the ranks being evaluated
-    printf("Evaluating for one pair. Ranks: ");
-    for (int i = 0; i < hand; ++i) {
-        printf("%d ", store_rank[i]);
-    }
-    printf("\n");
-
     // Check for exactly one pair in the hand
     int pairCount = 0;
     for (int i = 0; i < hand - 1; ++i) {
