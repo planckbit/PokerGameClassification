@@ -131,25 +131,30 @@ void classify::print_hidden() const {
 }
 
 int classify::straight_flush() const {
-     int test=1; //test while loop condition
-     int k=0;    //variable use for scanning elements of arrays
-     while(test!=0) {
-	  if(k<hand-1 && store_rank[k]==((store_rank[k+1])-1)) {
-               if(store_suit[k]==store_suit[k+1]) {
-                    ++k;
-               }
-               else {
-		    return 0; //no straight flush
-               }  
-          }     
-	  else if(k==hand-1) {
-               return 1;     //straight flush found
-          }
-          else {
-	       test=0;       //terminate the loop, no straight flush found
-          }
-     }     
-     return 0;               //no straight flush found by termination of loop
+    int test = 1; // Test while loop condition
+    int k = 0;    // Variable for scanning elements of arrays
+
+    // Check for Ace-high straight flush (10, J, Q, K, A)
+    if (hand >= 5 && store_rank[0] == 10 && store_rank[1] == 11 && store_rank[2] == 12 && store_rank[3] == 13 && store_rank[4] == 14) {
+        if (store_suit[0] == store_suit[1] && store_suit[1] == store_suit[2] && store_suit[2] == store_suit[3] && store_suit[3] == store_suit[4]) {
+            return 1; // Royal straight flush found
+        }
+    }
+
+    while (test != 0) {
+        if (k < hand - 1 && store_rank[k] == (store_rank[k + 1] - 1)) {
+            if (store_suit[k] == store_suit[k + 1]) {
+                ++k;
+            } else {
+                return 0; // No straight flush
+            }
+        } else if (k == hand - 1) {
+            return 1; // Straight flush found
+        } else {
+            test = 0; // Terminate the loop, no straight flush found
+        }
+    }
+    return 0; // No straight flush found
 }
 
 int classify::flush() const {
@@ -204,10 +209,6 @@ int classify::three_kind() const {
     // Check for exactly three cards of the same rank
     for (int i = 0; i < hand - 2; ++i) {
         if (store_rank[i] == store_rank[i + 1] && store_rank[i] == store_rank[i + 2]) {
-            // Ensure it's not part of a four-of-a-kind or full house
-            if ((i > 0 && store_rank[i - 1] == store_rank[i]) || (i + 3 < hand && store_rank[i + 3] == store_rank[i])) {
-                continue; // Skip if part of a larger group
-            }
             return 1; // Three-of-a-Kind found
         }
     }

@@ -7,6 +7,7 @@
 #include <time.h>
 #include <string> // For std::string
 #include <vector> // For std::vector
+#include <algorithm> // For std::find
 #include "cards.h"
 #include "classify.h"
 
@@ -20,6 +21,12 @@ void playPokerClassification();
 void playTexasHoldem();
 void printTable();
 void clearScreen();
+
+// Forward declaration of determineWinner
+std::string determineWinner(const std::string& dealerHand, const std::string& playerHand);
+
+// Correct forward declaration of findBestHand
+std::pair<std::string, std::vector<playingCard>> findBestHand(const std::vector<playingCard>& cards);
 
 void classify_hand(classify poker_hand, int found[], unsigned int occur[], unsigned int counter) {
     auto print_hand = [&](const char* classification) {
@@ -318,16 +325,54 @@ void playTexasHoldem() {
                     playerAllCards.insert(playerAllCards.end(), communityCards.begin(), communityCards.end());
 
                     // Classify the best hands
-                    std::string dealerBestHand = classifyBestHand(dealerAllCards);
-                    std::string playerBestHand = classifyBestHand(playerAllCards);
+                    auto dealerResult = findBestHand(dealerAllCards);
+                    auto playerResult = findBestHand(playerAllCards);
 
-                    // Display the best hands
-                    printf("\nDealer Best Hand: %s", dealerBestHand.c_str());
-                    printf("\nPlayer Best Hand: %s\n", playerBestHand.c_str());
+                    std::string dealerBestHand = dealerResult.first;
+                    std::vector<playingCard> dealerBestCards = dealerResult.second;
+
+                    std::string playerBestHand = playerResult.first;
+                    std::vector<playingCard> playerBestCards = playerResult.second;
+
+                    // Display the best hands with the 5 cards
+                    printf("\nDealer Best 5 Hand → ");
+                    for (const auto& card : dealerBestCards) {
+                        printf("[%s] ", card.toString().c_str());
+                    }
+                    printf("→ %s\n", dealerBestHand.c_str());
+
+                    printf("Player Best 5 Hand → ");
+                    for (const auto& card : playerBestCards) {
+                        printf("[%s] ", card.toString().c_str());
+                    }
+                    printf("→ %s\n", playerBestHand.c_str());
+
+                    // Determine the winner
+                    std::string winner = determineWinner(dealerBestHand, playerBestHand);
+                    printf("\n%s\n", winner.c_str());
                 }
             }
         }
     }
+}
+
+// Helper function to generate all 5-card combinations
+std::vector<std::vector<playingCard>> generateCombinations(const std::vector<playingCard>& cards) {
+    std::vector<std::vector<playingCard>> combinations;
+    std::vector<bool> select(cards.size(), false);
+    std::fill(select.begin(), select.begin() + 5, true);
+
+    do {
+        std::vector<playingCard> combination;
+        for (size_t i = 0; i < cards.size(); ++i) {
+            if (select[i]) {
+                combination.push_back(cards[i]);
+            }
+        }
+        combinations.push_back(combination);
+    } while (std::prev_permutation(select.begin(), select.end()));
+
+    return combinations;
 }
 
 std::string classifyBestHand(const classify& handClassifier) {
@@ -358,6 +403,97 @@ std::string classifyBestHand(const std::vector<playingCard>& cards) {
     if (handClassifier.two_pair()) return "Two Pair";
     if (handClassifier.one_pair()) return "One Pair";
     return "High Card";
+}
+
+std::pair<std::string, std::vector<playingCard>> findBestHand(const std::vector<playingCard>& cards) {
+    auto combinations = generateCombinations(cards);
+    const std::vector<std::string> handRankings = {
+        "High Card", "One Pair", "Two Pair", "Three-of-a-Kind", "Straight",
+        "Flush", "Full House", "Four-of-a-Kind", "Straight Flush"
+    };
+
+    std::string bestHand = "High Card";
+    std::vector<playingCard> bestCombination;
+
+    for (const auto& combination : combinations) {
+        std::vector<playingCard> modifiableCombination = combination; // Create a modifiable copy
+        std::string hand = classifyBestHand(modifiableCombination);
+        auto handRank = std::find(handRankings.begin(), handRankings.end(), hand);
+        auto bestHandRank = std::find(handRankings.begin(), handRankings.end(), bestHand);
+
+        if (handRank > bestHandRank) {
+            bestHand = hand;
+            bestCombination = modifiableCombination;
+        } else if (handRank == bestHandRank) {
+            // Compare kickers if the hand rank is the same
+            std::sort(bestCombination.begin(), bestCombination.end(), [](const playingCard& a, const playingCard& b) {
+                return a.theRank() > b.theRank();
+            });
+            std::sort(modifiableCombination.begin(), modifiableCombination.end(), [](const playingCard& a, const playingCard& b) {
+                return a.theRank() > b.theRank();
+            });
+
+            for (size_t i = 0; i < bestCombination.size(); ++i) {
+                if (modifiableCombination[i].theRank() > bestCombination[i].theRank()) {
+                    bestHand = hand;
+                    bestCombination = modifiableCombination;
+                    break;
+                } else if (modifiableCombination[i].theRank() < bestCombination[i].theRank()) {
+                    break;
+                }
+            }
+        }
+    }
+
+    return {bestHand, bestCombination};
+}
+
+std::string determineWinner(const std::string& dealerHand, const std::string& playerHand) {
+    const std::vector<std::string> handRankings = {
+        "High Card", "One Pair", "Two Pair", "Three-of-a-Kind", "Straight",
+        "Flush", "Full House", "Four-of-a-Kind", "Straight Flush"
+    };
+
+    auto dealerRank = std::find(handRankings.begin(), handRankings.end(), dealerHand);
+    auto playerRank = std::find(handRankings.begin(), handRankings.end(), playerHand);
+
+    if (dealerRank > playerRank) {
+        return "Dealer Wins";
+    } else if (playerRank > dealerRank) {
+        return "Player Wins";
+    } else {
+        return "It's a Tie";
+    }
+}
+
+std::string determineWinnerWithKickers(const std::pair<std::string, std::vector<playingCard>>& dealerResult,
+                                       const std::pair<std::string, std::vector<playingCard>>& playerResult) {
+    const std::vector<std::string> handRankings = {
+        "High Card", "One Pair", "Two Pair", "Three-of-a-Kind", "Straight",
+        "Flush", "Full House", "Four-of-a-Kind", "Straight Flush"
+    };
+
+    auto dealerRank = std::find(handRankings.begin(), handRankings.end(), dealerResult.first);
+    auto playerRank = std::find(handRankings.begin(), handRankings.end(), playerResult.first);
+
+    if (dealerRank > playerRank) {
+        return "Dealer Wins";
+    } else if (playerRank > dealerRank) {
+        return "Player Wins";
+    } else {
+        // Compare kickers if the hand rank is the same
+        const auto& dealerCards = dealerResult.second;
+        const auto& playerCards = playerResult.second;
+
+        for (size_t i = 0; i < dealerCards.size(); ++i) {
+            if (dealerCards[i].theRank() > playerCards[i].theRank()) {
+                return "Dealer Wins";
+            } else if (dealerCards[i].theRank() < playerCards[i].theRank()) {
+                return "Player Wins";
+            }
+        }
+        return "It's a Tie";
+    }
 }
 
 int main() {
