@@ -342,8 +342,12 @@ void playTexasHoldem() {
                     printf("→ %s\n", dealerBestHand.c_str());
 
                     printf("Player Best 5 Hand → ");
-                    for (const auto& card : playerBestCards) {
-                        printf("[%s] ", card.toString().c_str());
+                    if (playerBestCards.empty()) {
+                        printf("[No cards found] "); // Debugging output for empty vector
+                    } else {
+                        for (const auto& card : playerBestCards) {
+                            printf("[%s] ", card.toString().c_str());
+                        }
                     }
                     printf("→ %s\n", playerBestHand.c_str());
 
@@ -445,6 +449,24 @@ std::pair<std::string, std::vector<playingCard>> findBestHand(const std::vector<
         }
     }
 
+    if (bestCombination.empty() && !cards.empty()) {
+        // Default to the highest-ranked 5 cards if no valid combination is found
+        std::vector<playingCard> defaultCombination = cards;
+        std::sort(defaultCombination.begin(), defaultCombination.end(), [](const playingCard& a, const playingCard& b) {
+            return a.theRank() > b.theRank();
+        });
+        defaultCombination.resize(5);
+        bestCombination = defaultCombination;
+    }
+
+    // Debugging output
+    printf("Debug: Best hand classification: %s\n", bestHand.c_str());
+    printf("Debug: Best combination: ");
+    for (const auto& card : bestCombination) {
+        printf("[%s] ", card.toString().c_str());
+    }
+    printf("\n");
+
     return {bestHand, bestCombination};
 }
 
@@ -481,18 +503,53 @@ std::string determineWinnerWithKickers(const std::pair<std::string, std::vector<
     } else if (playerRank > dealerRank) {
         return "Player Wins";
     } else {
-        // Compare kickers if the hand rank is the same
-        const auto& dealerCards = dealerResult.second;
-        const auto& playerCards = playerResult.second;
-
-        for (size_t i = 0; i < dealerCards.size(); ++i) {
-            if (dealerCards[i].theRank() > playerCards[i].theRank()) {
-                return "Dealer Wins";
-            } else if (dealerCards[i].theRank() < playerCards[i].theRank()) {
-                return "Player Wins";
+        // Compare pair ranks first if the hand rank is the same
+        int dealerPairRank = 0, playerPairRank = 0;
+        for (size_t i = 0; i < dealerResult.second.size() - 1; ++i) {
+            if (dealerResult.second[i].theRank() == dealerResult.second[i + 1].theRank()) {
+                dealerPairRank = dealerResult.second[i].theRank();
+                break;
             }
         }
-        return "It's a Tie";
+        for (size_t i = 0; i < playerResult.second.size() - 1; ++i) {
+            if (playerResult.second[i].theRank() == playerResult.second[i + 1].theRank()) {
+                playerPairRank = playerResult.second[i].theRank();
+                break;
+            }
+        }
+
+        if (dealerPairRank > playerPairRank) {
+            return "Dealer Wins";
+        } else if (playerPairRank > dealerPairRank) {
+            return "Player Wins";
+        } else {
+            // Compare kickers if the pair ranks are the same
+            std::vector<int> dealerKickers;
+            std::vector<int> playerKickers;
+
+            for (const auto& card : dealerResult.second) {
+                if (card.theRank() != dealerPairRank) {
+                    dealerKickers.push_back(card.theRank());
+                }
+            }
+            for (const auto& card : playerResult.second) {
+                if (card.theRank() != playerPairRank) {
+                    playerKickers.push_back(card.theRank());
+                }
+            }
+
+            std::sort(dealerKickers.rbegin(), dealerKickers.rend());
+            std::sort(playerKickers.rbegin(), playerKickers.rend());
+
+            for (size_t i = 0; i < std::min(dealerKickers.size(), playerKickers.size()); ++i) {
+                if (dealerKickers[i] > playerKickers[i]) {
+                    return "Dealer Wins";
+                } else if (playerKickers[i] > dealerKickers[i]) {
+                    return "Player Wins";
+                }
+            }
+            return "It's a Tie";
+        }
     }
 }
 
